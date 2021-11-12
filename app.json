@@ -1,0 +1,6 @@
+{
+  "name": "node-dev-env",
+  "description": "Simple node development environment for api",
+  "repository": "https://github.com/jumiranda5/node-dev-env",
+  "keywords": ["node", "starter", "boilerplate"]
+}
