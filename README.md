@@ -22,8 +22,29 @@
         avatar: ''
       }
 
-  * Logout => #TODO;
+  * Logout => 
+    - Route: POST /api/logout
+    - Response: { message: '' }
+
   * Delete account => #TODO
+
+# USER:
+
+  * Search user =>
+    - Route: GET /api/user/search/:page/:search
+    - Rescponse: {
+        message: `Found users.`,
+        result: [
+          {
+            userId: '',
+            username: '',
+            name: '',
+            avatar: '',
+            isFollowing: boolean
+          }
+        ]
+      }
+    
 
 
 # TODO: (controllers)

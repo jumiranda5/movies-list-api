@@ -9,8 +9,11 @@ import { login } from './controllers/auth/login_controller';
 import { signup } from './controllers/auth/signup_controller';
 import { logout } from './controllers/auth/logout_controller';
 
+// User
+import { search_user } from './controllers/user/search_user_controller';
+
 // Middlewares
-import { validateSignUp } from './middlewares/validation';
+import { validateSignUp, validateSearchUser } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
 
 
@@ -22,5 +25,8 @@ router.get('/api', access);
 router.post('/api/login', login);
 router.post('/api/signup', validateSignUp, signup);
 router.post('/api/logout', requireLogin, logout);
+
+/* ------- USER ------- */
+router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
 
 module.exports = router;

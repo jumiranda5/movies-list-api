@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 const debug = require('debug')('app:validator');
 
 /* ================================================
@@ -44,6 +44,20 @@ export const validateSignUp = [
     .isEmail()
     .normalizeEmail()
     .withMessage('Invalid email.'),
+];
+
+export const validateSearchUser = [
+  param('search')
+    .matches(/^[^"/%$#,+=<>:;?!*\\{}[\]()]{1,100}$/u)
+    .withMessage('Invalid name')
+    .trim()
+];
+
+export const validateSearch = [
+  param('search')
+    .matches(/^[^"<>\\{}[\]]{1,200}$/u)
+    .withMessage('Invalid search')
+    .trim()
 ];
 
 
