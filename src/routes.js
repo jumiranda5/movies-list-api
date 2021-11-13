@@ -12,6 +12,10 @@ import { logout } from './controllers/auth/logout_controller';
 // User
 import { search_user } from './controllers/user/search_user_controller';
 
+// Follow
+import { follow } from './controllers/follow/follow_controller';
+import { unfollow } from './controllers/follow/unfollow_controller';
+
 // Middlewares
 import { validateSignUp, validateSearchUser } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
@@ -28,5 +32,9 @@ router.post('/api/logout', requireLogin, logout);
 
 /* ------- USER ------- */
 router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
+
+/* ------- FOLLOWS ------- */
+router.post('/api/follow/:to', requireLogin, follow);
+router.post('/api/unfollow/:to', requireLogin, unfollow);
 
 module.exports = router;

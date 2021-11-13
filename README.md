@@ -32,7 +32,7 @@
 
   * Search user =>
     - Route: GET /api/user/search/:page/:search
-    - Rescponse: {
+    - Response: {
         message: `Found users.`,
         result: [
           {
@@ -45,6 +45,16 @@
         ]
       }
     
+# FOLLOW:
+
+  * Follow =>
+    - Route: POST /api/follow/:to
+    - Response: { message: '' }
+
+  * Unfollow =>
+    - Route: POST /api/follow/:to
+    - Response: { message: '' }
+
 
 
 # TODO: (controllers)
