@@ -13,7 +13,7 @@ export const searchUser = async (searchQuery, userId, page) => {
   //"CALL db.idx.fulltext.queryNodes('User','ca*') YIELD node AS u RETURN u.name, u.username"
   // use * for fuzzy search
 
-  const nPerPage = 10;
+  const nPerPage = 20;
   const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
 
   try {

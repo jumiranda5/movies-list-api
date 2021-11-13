@@ -11,9 +11,7 @@ import { closeGraph } from './database/graphConfig';
 
 const corsConfig = {
   origin: [
-    //'http://localhost:3000',
-    //'http://127.0.0.1:3000',
-    //'https://euvi31684610.loca.lt/'
+    'https://euvi.herokuapp.com/'
   ],
   methods:['GET','POST'],
   credentials: false

@@ -3,14 +3,14 @@ import mongoose from 'mongoose';
 const debug = require('debug')('app:mongo');
 
 const {
-  DB : { db_name, db_user, db_pass }
+  DB : { mongo_uri }
 } = config;
 
 // Mongo
 /*eslint-disable no-console*/
 export const connectMongo = () => {
 
-  const mongoURL = `mongodb+srv://${db_user}:${db_pass}@clustereuvi.i4ubn.mongodb.net/${db_name}?retryWrites=true&w=majority`;
+  const mongoURL = mongo_uri; //`mongodb+srv://${db_user}:${db_pass}@clustereuvi.i4ubn.mongodb.net/${db_name}?retryWrites=true&w=majority`;
 
   try {
     mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
