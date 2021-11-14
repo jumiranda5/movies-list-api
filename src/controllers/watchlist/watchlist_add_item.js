@@ -1,6 +1,6 @@
 import { updateWatchlistAddItem } from './_queries_watchlist';
 import { verifyAccessToken } from '../../helpers/token_helper';
-const debug = require('debug')('app:watchlist');
+//const debug = require('debug')('app:watchlist');
 
 export const add_watchlist_item = async (req, res, next) => {
 
@@ -24,13 +24,13 @@ export const add_watchlist_item = async (req, res, next) => {
 
   try {
 
-    debug('Add title to watchlist...');
+    //debug('Add title to watchlist...');
     const accessToken = req.headers['x-access-token'];
     const dec = await verifyAccessToken(accessToken);
 
     await updateWatchlistAddItem(dec.userId, type, mediaObj);
     const message = 'Success';
-    debug(message);
+    //debug(message);
     return res.json({message: message});
 
   }

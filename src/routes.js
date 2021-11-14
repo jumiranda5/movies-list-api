@@ -50,5 +50,6 @@ router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_it
 
 /* -------- TMDB -------- */
 router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_multi);
+//router.get('/api/tmdb/search/multi/:query/:page/:lang', search_tmdb_multi);
 
 module.exports = router;

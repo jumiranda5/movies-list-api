@@ -61,6 +61,7 @@
     - Route: GET /api/tmdb/search/multi/:query/:page/:lang
     - Response: {
         message: '',
+        isLastPage: boolean,
         result: {
           title: '',
           tmdb_id: '',

@@ -1,6 +1,6 @@
 import { verifyAccessToken } from "../../helpers/token_helper";
 import { findUserSid } from './_queries_auth';
-const debug = require('debug')('app:access');
+//const debug = require('debug')('app:access');
 
 export const access = async (req, res) => {
 
@@ -11,12 +11,12 @@ export const access = async (req, res) => {
 
   if (req.headers['x-access-token']) {
 
-    debug('Session header found. Verify token...');
+    //debug('Session header found. Verify token...');
     const accessToken = req.headers['x-access-token'];
 
     try {
       const access_token_dec = await verifyAccessToken(accessToken);
-      debug('Valid access token');
+      //debug('Valid access token');
 
       // verify sid on db
       const userId = access_token_dec.userId;
@@ -27,13 +27,13 @@ export const access = async (req, res) => {
 
     }
     catch (error) {
-      debug('Invalid access token');
+      //debug('Invalid access token');
       return res.json({message: 'Invalid access token'});
     }
 
   }
   else {
-    debug(`User not logged in.`);
+    //debug(`User not logged in.`);
     return res.json({message: 'Invalid access token'});
   }
 

@@ -1,7 +1,7 @@
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { isInputDataValid } from '../../middlewares/validation';
 import { searchUser } from './_queries_user';
-const debug = require('debug')('app:search-user');
+//const debug = require('debug')('app:search-user');
 
 export const search_user = async (req, res, next) => {
 
@@ -20,7 +20,7 @@ export const search_user = async (req, res, next) => {
     return res.send({ message: err.message });
   }
 
-  debug(`Search key: ${search} / Page: ${page}`);
+  //debug(`Search key: ${search} / Page: ${page}`);
 
   try {
 

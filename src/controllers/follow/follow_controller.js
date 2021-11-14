@@ -1,6 +1,6 @@
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { createFollow } from './_queries_follow';
-const debug = require('debug')('app:follow');
+//const debug = require('debug')('app:follow');
 
 export const follow = async (req, res, next) => {
 
@@ -14,8 +14,8 @@ export const follow = async (req, res, next) => {
     // create follow relatioship on graph
     await createFollow(from, to);
 
-    debug('Follow relationship created!');
-    debug(`User: ${ from } following ${ to }`);
+    //debug('Follow relationship created!');
+    //debug(`User: ${ from } following ${ to }`);
 
     // todo: create notification on mongo
 

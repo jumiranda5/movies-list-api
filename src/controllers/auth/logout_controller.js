@@ -1,10 +1,10 @@
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { updateUserSid } from './_queries_auth';
-const debug = require('debug')('app:logout');
+//const debug = require('debug')('app:logout');
 
 export const logout = async (req, res) => {
 
-  debug('Logging out...');
+  //debug('Logging out...');
 
   try {
 
@@ -18,7 +18,7 @@ export const logout = async (req, res) => {
 
   }
   catch(error) {
-    debug(error);
+    //debug(error);
     res.status(error.status || 500);
     return res.send({ message: error.message });
   }

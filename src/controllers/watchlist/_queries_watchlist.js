@@ -1,5 +1,5 @@
 import Watchlist from '../../database/models/watchlist_model';
-const debug = require('debug')('app:mongo');
+//const debug = require('debug')('app:mongo');
 
 /* ================================================================================================
 
@@ -18,26 +18,25 @@ export const updateWatchlistAddItem = async (userId, mediaType, mediaObj) => {
   if (mediaType === 'movie') update = updateMovies;
   if (mediaType === 'tv') update = updateSeries;
 
-  debug(`Inserting item to ${mediaType}...`);
+  //debug(`Inserting item to ${mediaType}...`);
   const updateDoc = await Watchlist.updateOne(query, update, options).exec();
-  debug('... done'); // +126ms
+  //debug('... done'); // +126ms
 
   const upserted = updateDoc.upsertedCount;
   const modified = updateDoc.modifiedCount;
-  debug(updateDoc);
+  //debug(updateDoc);
 
   if (upserted === 1 || modified === 1) {
-    debug(`Completed insertion.`);
+    //debug(`Completed insertion.`);
     return true;
   }
   else {
-    debug(`Insertion failed.`);
+    //debug(`Insertion failed.`);
     const err = new Error(`Server error.`);
     err.status = 500;
-    debug(err.message);
+    //debug(err.message);
     throw err;
   }
-
 
 };
 
@@ -52,23 +51,23 @@ export const updateWatchlistDeleteItem = async (userId, mediaType, tmdb_id) => {
   if (mediaType === 'movie') update = updateMovies;
   if (mediaType === 'tv') update = updateSeries;
 
-  debug(`Deleting item from ${mediaType}...`);
+  //debug(`Deleting item from ${mediaType}...`);
   const updateDoc = await Watchlist.updateOne(query, update, options).exec();
-  debug('... done'); // +128ms
+  //debug('... done'); // +128ms
 
   const upserted = updateDoc.upsertedCount;
   const modified = updateDoc.modifiedCount;
-  debug(updateDoc);
+  //debug(updateDoc);
 
   if (upserted === 1 || modified === 1) {
-    debug(`Completed removal.`);
+    //debug(`Completed removal.`);
     return true;
   }
   else {
-    debug(`Insertion failed.`);
+    //debug(`Insertion failed.`);
     const err = new Error(`Server error.`);
     err.status = 500;
-    debug(err.message);
+    //debug(err.message);
     throw err;
   }
 
@@ -76,16 +75,16 @@ export const updateWatchlistDeleteItem = async (userId, mediaType, tmdb_id) => {
 
 export const findWatchlist = async (userId) => {
 
-  debug('Find watchlist...');
+  //debug('Find watchlist...');
   const watchlist = await Watchlist.findOne({userId: userId}).exec();
-  debug('... done');
+  //debug('... done');
 
   if (watchlist !== null) {
-    debug(`watchlist found: ${watchlist._id}`);
+    //debug(`watchlist found: ${watchlist._id}`);
     return watchlist;
   }
   else {
-    debug('Whatchlist document not found');
+    //debug('Whatchlist document not found');
     return null;
   }
 

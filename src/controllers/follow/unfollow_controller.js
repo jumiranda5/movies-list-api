@@ -1,4 +1,4 @@
-const debug = require('debug')('app:follow');
+//const debug = require('debug')('app:follow');
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { deleteFollow } from './_queries_follow';
 
@@ -12,7 +12,7 @@ export const unfollow = async (req, res, next) => {
     const to = req.params.to;
 
     await deleteFollow(from, to);
-    debug(`User ${to} unfollowed!`);
+    //debug(`User ${to} unfollowed!`);
 
     return res.json({
       message: `Unfollowed`,

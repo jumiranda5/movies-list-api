@@ -1,5 +1,5 @@
 import tmdb from '../config_tmdb';
-const debug = require('debug')('app:tmdb_helper');
+//const debug = require('debug')('app:tmdb_helper');
 
 /* ========== SEARCH ITEM OBJECT ========== */
 
@@ -92,7 +92,7 @@ export const searchResults = (responseData, lang, savedMovies, savedSeries, type
 
 export const getMediaObject = (data, lang, type) => {
 
-  debug('Building media object...');
+  //debug('Building media object...');
 
   const site_url = tmdb.site_url;
   const image_base_url = tmdb.images.secure_base_url;
@@ -168,7 +168,7 @@ export const getMediaObject = (data, lang, type) => {
 
 export const getProviders = (data, countryCode) => {
 
-  debug('Building providers list...');
+  //debug('Building providers list...');
 
   const base_url = tmdb.images.secure_base_url;
   const logo_size = tmdb.images.logo_sizes[1];
@@ -235,7 +235,7 @@ export const getProviders = (data, countryCode) => {
 
 export const getMainTrailer = (trailerObjArray) => {
 
-  debug('Getting main trailer...');
+  //debug('Getting main trailer...');
 
   if (trailerObjArray.length === 0) return [];
   else {
