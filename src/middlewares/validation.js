@@ -54,7 +54,7 @@ export const validateSearchUser = [
 ];
 
 export const validateSearch = [
-  param('search')
+  param('query')
     .matches(/^[^"<>\\{}[\]]{1,200}$/u)
     .withMessage('Invalid search')
     .trim()

@@ -55,7 +55,37 @@
     - Route: POST /api/follow/:to
     - Response: { message: '' }
 
+# TMDB:
 
+  * Search multi =>
+    - Route: GET /api/tmdb/search/multi/:query/:page/:lang
+    - Response: {
+        message: '',
+        result: {
+          title: '',
+          tmdb_id: '',
+          type: '',
+          overview: '',
+          release_year: '',
+          poster: '',
+          popularity: '',
+          adult: boolean,
+          genre: [],
+          isBookmarked: boolean
+        }
+      }
+
+# WATCHLIST
+
+  * Add title =>
+    - Route: POST /api/watchlist/add
+    - Response: { message: '' }
+
+  * Delete title => 
+    - Route: POST /api/watchlist/delete/:type/:id
+    - Response: { message: '' }
+
+#
 
 # TODO: (controllers)
  - post

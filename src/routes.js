@@ -16,8 +16,15 @@ import { search_user } from './controllers/user/search_user_controller';
 import { follow } from './controllers/follow/follow_controller';
 import { unfollow } from './controllers/follow/unfollow_controller';
 
+// Watchlist
+import { add_watchlist_item } from './controllers/watchlist/watchlist_add_item';
+import { delete_watchlist_item } from './controllers/watchlist/watchlist_delete_item';
+
+// TMDB
+import { search_tmdb_multi } from './controllers/tmdb/search_multi_controller';
+
 // Middlewares
-import { validateSignUp, validateSearchUser } from './middlewares/validation';
+import { validateSignUp, validateSearchUser, validateSearch } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
 
 
@@ -36,5 +43,12 @@ router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser]
 /* ------- FOLLOWS ------- */
 router.post('/api/follow/:to', requireLogin, follow);
 router.post('/api/unfollow/:to', requireLogin, unfollow);
+
+/* -------- WATCHLIST -------- */
+router.post('/api/watchlist/add', requireLogin, add_watchlist_item);
+router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_item);
+
+/* -------- TMDB -------- */
+router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_multi);
 
 module.exports = router;
