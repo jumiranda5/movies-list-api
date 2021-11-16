@@ -17,6 +17,7 @@ import { follow } from './controllers/follow/follow_controller';
 import { unfollow } from './controllers/follow/unfollow_controller';
 
 // Watchlist
+import { watchlist } from './controllers/watchlist/watchlist';
 import { add_watchlist_item } from './controllers/watchlist/watchlist_add_item';
 import { delete_watchlist_item } from './controllers/watchlist/watchlist_delete_item';
 
@@ -45,6 +46,7 @@ router.post('/api/follow/:to', requireLogin, follow);
 router.post('/api/unfollow/:to', requireLogin, unfollow);
 
 /* -------- WATCHLIST -------- */
+router.get('/api/watchlist', requireLogin, watchlist);
 router.post('/api/watchlist/add', requireLogin, add_watchlist_item);
 router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_item);
 

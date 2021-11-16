@@ -86,6 +86,14 @@
     - Route: POST /api/watchlist/delete/:type/:id
     - Response: { message: '' }
 
+  * Watchlist =>
+    - Route: GET /api/watchlist
+    - Response: {
+        message: '',
+        series: [],
+        movies: []
+      }
+
 #
 
 # TODO: (controllers)
