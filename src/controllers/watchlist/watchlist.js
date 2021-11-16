@@ -16,25 +16,10 @@ export const watchlist = async (req, res, next) => {
       //debug(`Movies: ${watchlistDocument.movies.length}`);
       //debug(`Series: ${watchlistDocument.series.length}`);
 
-      const movies = watchlistDocument.movies;
-      const series = watchlistDocument.series;
-
-      if (movies.length > 0) {
-        movies.forEach(movie => {
-          movie.isBookmarked = true;
-        });
-      }
-
-      if (series.length > 0) {
-        series.forEach(serie => {
-          serie.isBookmarked = true;
-        });
-      }
-
       return res.json({
         message: 'Watchlist document found',
-        series: series,
-        movies: movies
+        series: watchlistDocument.series,
+        movies: watchlistDocument.movies
       });
     }
     else {
