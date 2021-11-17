@@ -1,13 +1,13 @@
 import { createAccessToken, verifyGoogleToken } from '../../helpers/token_helper';
 import { checkIfUserExists, updateUserSid } from './_queries_auth';
 import { v4 as uuidv4 } from 'uuid';
-//const debug = require('debug')('app:login');
+const debug = require('debug')('app:login');
 
 export const login = async (req, res) => {
 
   const authToken = req.headers['x-auth-token'];
 
-  //debug('Login...');
+  debug('Login...');
 
   try {
 
@@ -16,14 +16,14 @@ export const login = async (req, res) => {
 
     if (savedUser) {
 
-      //debug(`User found: ${savedUser.username}`);
-      //debug(`Create access token...`);
+      debug(`User found: ${savedUser.username}`);
+      debug(`Create access token...`);
 
       const sid = uuidv4();
       const access_token = await createAccessToken(savedUser._id, sid);
       await updateUserSid(savedUser._id, sid);
 
-      //debug('User logged in.');
+      debug('User logged in.');
 
       return res.header("x-access-token", access_token).json({
         message: 'User logged in',
@@ -34,14 +34,14 @@ export const login = async (req, res) => {
       });
     }
     else {
-      //debug('User not found.');
+      debug('User not found.');
       res.status(401);
       return res.send({ message: 'User not found.' });
     }
 
   }
   catch(error) {
-    //debug(error);
+    debug(error);
     res.status(error.status || 500);
     return res.send({ message: error.message });
   }

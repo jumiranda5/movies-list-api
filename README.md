@@ -94,6 +94,12 @@
         movies: []
       }
 
+# POST:
+  
+  * Add post =>
+    - Route: POST /api/post/add/:type
+    - Response: { message: '' }
+
 #
 
 # TODO: (controllers)

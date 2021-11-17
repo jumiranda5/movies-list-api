@@ -24,6 +24,9 @@ import { delete_watchlist_item } from './controllers/watchlist/watchlist_delete_
 // TMDB
 import { search_tmdb_multi } from './controllers/tmdb/search_multi_controller';
 
+// Post
+import { add_post } from './controllers/post/add_post_controller';
+
 // Middlewares
 import { validateSignUp, validateSearchUser, validateSearch } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
@@ -52,6 +55,8 @@ router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_it
 
 /* -------- TMDB -------- */
 router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_multi);
-//router.get('/api/tmdb/search/multi/:query/:page/:lang', search_tmdb_multi);
+
+/* -------- POSTS -------- */
+router.post('/api/post/add/:type', requireLogin, add_post);
 
 module.exports = router;
