@@ -23,9 +23,14 @@ import { delete_watchlist_item } from './controllers/watchlist/watchlist_delete_
 
 // TMDB
 import { search_tmdb_multi } from './controllers/tmdb/search_multi_controller';
+import { search_tmdb_movie } from './controllers/tmdb/search_movie_controller';
+import { search_tmdb_tv } from './controllers/tmdb/search_tv_controller';
 
 // Post
 import { add_post } from './controllers/post/add_post_controller';
+
+// Top 10
+import { top10 } from './controllers/top_10/top10_controller';
 
 // Middlewares
 import { validateSignUp, validateSearchUser, validateSearch } from './middlewares/validation';
@@ -55,8 +60,13 @@ router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_it
 
 /* -------- TMDB -------- */
 router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_multi);
+router.get('/api/tmdb/search/tv/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_tv);
+router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_movie);
 
 /* -------- POSTS -------- */
 router.post('/api/post/add/:type', requireLogin, add_post);
+
+/* -------- Top 10 -------- */
+router.get('/api/top10/:type', requireLogin, top10);
 
 module.exports = router;
