@@ -51,7 +51,7 @@ export const search_tmdb_movie = async (req, res, next) => {
     let savedMovies = [];
     if (watchlist) savedMovies = watchlist.movies || [];
 
-    debug(`Saved movies: ${savedMovies}`)
+    debug(`Saved movies: ${savedMovies}`);
 
     const responseData = await searchResults(response.data.results, lang, savedMovies, savedSeries, "movie");
 

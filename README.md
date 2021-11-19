@@ -55,6 +55,32 @@
     - Route: POST /api/follow/:to
     - Response: { message: '' }
 
+  * Followers =>
+    - Route: GET /api/followers/:userId/:page
+    - Response: {
+        message: '',
+        result: {
+          userId: '',
+          username: '',
+          name: '',
+          avatar: '',
+          isFollowing: boolean
+        }
+      }
+
+  * Following =>
+    - Route: GET /api/following/:userId/:page
+    - Response: {
+        message: '',
+        result: {
+          userId: '',
+          username: '',
+          name: '',
+          avatar: '',
+          isFollowing: boolean
+        }
+      }
+
 # TMDB:
 
   * Search multi =>

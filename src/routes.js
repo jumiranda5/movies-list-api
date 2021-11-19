@@ -13,6 +13,8 @@ import { logout } from './controllers/auth/logout_controller';
 import { search_user } from './controllers/user/search_user_controller';
 
 // Follow
+import { following } from './controllers/follow/following_controller';
+import { followers } from './controllers/follow/followers_controller';
 import { follow } from './controllers/follow/follow_controller';
 import { unfollow } from './controllers/follow/unfollow_controller';
 
@@ -50,6 +52,8 @@ router.post('/api/logout', requireLogin, logout);
 router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
 
 /* ------- FOLLOWS ------- */
+router.get('/api/followers/:userId/:page', requireLogin, followers);
+router.get('/api/following/:userId/:page', requireLogin, following);
 router.post('/api/follow/:to', requireLogin, follow);
 router.post('/api/unfollow/:to', requireLogin, unfollow);
 
