@@ -1,5 +1,5 @@
 import { graphDb } from '../../database/graphConfig';
-//const debug = require('debug')('app:follow-queries');
+const debug = require('debug')('app:follow-queries');
 
 /* ================================================================================================
 
@@ -29,25 +29,23 @@ export const deleteFollow = async (from, to) => {
 
 export const findFollowers = async (userId, page, visitorId) => {
 
-  const nPerPage = 10;
+  const nPerPage = 20;
   const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
 
   let query;
   if (visitorId === userId) {
     query = `MATCH (from:User)-[f:FOLLOWS]->(u:User{userId:'${userId}'})
-      WITH from, f.createdAt AS createdAt
       OPTIONAL MATCH (u)-[f2:FOLLOWS]->(from)
-      RETURN from, createdAt, count(f2) AS isFollowing
+      RETURN from, f.createdAt AS createdAt, count(f2) AS isFollowing
       ORDER BY createdAt DESC
       SKIP ${nSkip}
       LIMIT ${nPerPage}`;
   }
   else {
     query = `MATCH (from:User)-[f:FOLLOWS]->(u:User{userId:'${userId}'})
-      WITH from, f.createdAt AS createdAt
       OPTIONAL MATCH (v:User{userId:'${visitorId}'})-[f2:FOLLOWS]->(from)
-      WITH from, createdAt, count(f2) AS isFollowing
-      ORDER BY isFollowing DESC
+      WITH from, f.createdAt AS createdAt, count(f2) AS isFollowing
+      ORDER BY isFollowing, createdAt DESC
       RETURN from, createdAt, isFollowing
       SKIP ${nSkip}
       LIMIT ${nPerPage}`;
@@ -62,6 +60,8 @@ export const findFollowers = async (userId, page, visitorId) => {
     const user = data[i]._values[0].properties;
     const isFollowingCount = data[i]._values[2];
 
+    debug(`isFollowingCount: ${isFollowingCount}`);
+
     let isFollowing;
     isFollowingCount > 0 ? isFollowing = true : isFollowing = false;
 
@@ -72,6 +72,9 @@ export const findFollowers = async (userId, page, visitorId) => {
       avatar: user.avatar,
       isFollowing: isFollowing
     };
+
+    //debug(follower);
+
     followersList.push(follower);
   }
 
