@@ -44,6 +44,19 @@
           }
         ]
       }
+
+  * Profile =>
+    - Route: GET /api/user/profile/:userId
+    - Response: {
+        message: 'Success',
+        user: user,
+        followersCount: int,
+        followingCount: int,
+        postsCount: int,
+        isOwnProfile: boolean,
+        isFollowing: boolean,
+        posts: []
+      }
     
 # FOLLOW:
 

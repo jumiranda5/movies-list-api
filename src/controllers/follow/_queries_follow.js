@@ -93,6 +93,8 @@ export const findFollowers = async (userId, page, visitorId) => {
 
 export const findFollowing = async (userId, page, visitorId) => {
 
+  // Todo: review this query...
+
   const nPerPage = 10;
   const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
 

@@ -11,6 +11,7 @@ import { logout } from './controllers/auth/logout_controller';
 
 // User
 import { search_user } from './controllers/user/search_user_controller';
+import { profile } from './controllers/user/profile_controller';
 
 // Follow
 import { following } from './controllers/follow/following_controller';
@@ -49,6 +50,7 @@ router.post('/api/signup', validateSignUp, signup);
 router.post('/api/logout', requireLogin, logout);
 
 /* ------- USER ------- */
+router.get('/api/user/profile/:userId', requireLogin, profile);
 router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
 
 /* ------- FOLLOWS ------- */
