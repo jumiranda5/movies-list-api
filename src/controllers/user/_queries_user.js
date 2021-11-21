@@ -1,6 +1,7 @@
 import { graphDb } from '../../database/graphConfig';
 import Post from '../../database/models/post_model';
-//const debug = require('debug')('app:graph');
+import User from '../../database/models/user_model';
+const debug = require('debug')('app:graph');
 
 /* ================================================================================================
 
@@ -114,6 +115,30 @@ export const getUserProfile = async (userId, visitorId) => {
 
 };
 
+export const updateUserNode = async (userData) => {
+
+  const userId = userData._id;
+  const name = userData.name;
+  const username = userData.username;
+  const avatar = userData.avatar;
+
+  try {
+    await graphDb.query(`
+      MATCH (n:User {userId: '${userId}'})
+      SET n += {
+        name: '${name}',
+        avatar: '${avatar}',
+        search: '${username} ${name}'
+      }`
+    );
+    //debug(`User node updated on neo4j`);
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+};
 
 /* ================================================================================================
 
@@ -142,5 +167,44 @@ export const getUserPosts = async (userId) => {
   }
 
   return postsList;
+
+};
+
+export const updateUserDocument = async (userData) => {
+
+  const userId = userData._id;
+  const name = userData.name;
+  const avatar = userData.avatar;
+
+  const query = { _id: userId};
+  const options = { new: true };
+  let update;
+
+  avatar === "" ?
+  update = { $set: { name }} :
+  update = { $set: { avatar, name }};
+
+  try {
+    //debug(`Updating user...`);
+    const user = await User.findOneAndUpdate(query, update, options).exec();
+
+    /*
+    debug(`Updated user =>
+           username: ${user.username},
+           name: ${user.name},
+           avatar: ${user.avatar}`);
+    */
+
+    return user;
+  }
+  catch (error) {
+    if (error.code === 11000) {
+      const err = new Error(`Username must be unique`);
+      err.status = 409 ;
+      //debug(err.message);
+      throw err;
+    }
+    else throw error;
+  }
 
 };

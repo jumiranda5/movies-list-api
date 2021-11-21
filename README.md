@@ -57,6 +57,10 @@
         isFollowing: boolean,
         posts: []
       }
+
+  * Edit Profile =>
+    - Route: GET /api/user/edit-user
+    - Response: { user }
     
 # FOLLOW:
 
