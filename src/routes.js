@@ -13,6 +13,7 @@ import { logout } from './controllers/auth/logout_controller';
 import { search_user } from './controllers/user/search_user_controller';
 import { profile } from './controllers/user/profile_controller';
 import { edit_user } from './controllers/user/edit_user_controller';
+import { profile_posts } from './controllers/user/profile_posts_controller';
 
 // Follow
 import { following } from './controllers/follow/following_controller';
@@ -52,6 +53,7 @@ router.post('/api/logout', requireLogin, logout);
 
 /* ------- USER ------- */
 router.get('/api/user/profile/:userId', requireLogin, profile);
+router.get('/api/user/profile/:userId/:tab', requireLogin, profile_posts);
 router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
 router.post('/api/user/edit-user', [requireLogin, validateSearchUser], edit_user);
 
