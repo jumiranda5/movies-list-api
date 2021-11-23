@@ -9,7 +9,6 @@ export const profile = async (req, res, next) => {
   const userId = req.params.userId;
   const accessToken = req.headers['x-access-token'];
   let isOwnProfile;
-  let isFollowing;
 
   // Get user (avatar, id, name, username), followers count,  following count, posts count from graph
   // Get posts from mongo (post type, media type, title[avatar, id, title], reaction)
@@ -36,7 +35,7 @@ export const profile = async (req, res, next) => {
       followingCount: profile.followingCount,
       postsCount: profile.postsCount,
       isOwnProfile,
-      isFollowing: false,
+      isFollowing: profile.isFollowing,
       posts
     });
 

@@ -63,6 +63,9 @@ export const searchUser = async (searchQuery, userId, page) => {
 
 export const getUserProfile = async (userId, visitorId) => {
 
+  debug(userId);
+  debug(visitorId);
+
   let query;
   if (userId === visitorId) {
 
@@ -79,22 +82,37 @@ export const getUserProfile = async (userId, visitorId) => {
 
   }
   else {
-
-    //debug('other profile query...');
-
-    query = ``;
+    query = `
+    MATCH (u:User{userId:'${userId}'})
+    OPTIONAL MATCH (:User)-[f1:FOLLOWS]->(u)
+    OPTIONAL MATCH (visitor:User{userId: '616b003821f6b937d9e4473e'})-[isFollowing:FOLLOWS]->(u)
+    WITH u AS user, count(f1) AS followers, count(DISTINCT isFollowing) AS isFollowing
+    OPTIONAL MATCH (user)-[f2:FOLLOWS]->(:User)
+    OPTIONAL MATCH (user)-[:POSTED]->(p:Post)
+    RETURN user, followers, count(DISTINCT f2) AS following, count(DISTINCT p) AS posts, isFollowing
+  `;
 
   }
 
   const graphRes = await graphDb.query(query);
   const results = graphRes._results;
 
-  //debug(results);
+  debug(results);
 
   const userRes = results[0]._values[0].properties;
   const followersCount = results[0]._values[1];
   const followingCount = results[0]._values[2];
   const postsCount = results[0]._values[3];
+
+  let isFollowing;
+  if (userId !== visitorId) {
+    const isFollowingCount = results[0]._values[4];
+    if (isFollowingCount > 0) isFollowing = true;
+    else isFollowing = false;
+  }
+  else isFollowing = false;
+
+  debug(`FOLLOWING => ${isFollowing}`);
 
   const user = {
     userId: userRes.userId,
@@ -108,7 +126,7 @@ export const getUserProfile = async (userId, visitorId) => {
     postsCount,
     followersCount,
     followingCount,
-    isFollowing: false
+    isFollowing: isFollowing
   };
 
   return data;
