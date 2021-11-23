@@ -1,7 +1,7 @@
 import Post from '../../database/models/post_model';
 import Top10 from '../../database/models/top10_model';
 import { graphDb } from '../../database/graphConfig';
-//const debug = require('debug')('app:mongo');
+const debug = require('debug')('app:post');
 
 /* ================================================================================================
 
@@ -132,5 +132,50 @@ export const createPostReaction = async (postData, postId) => {
     throw error;
   }
   */
+
+};
+
+export const findLikes = async (postId, userId, page) => {
+
+  const nPerPage = 20;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
+
+  const query = `
+    MATCH (u:User)-[l:LIKED]->(p:Post{postId:'${postId}'})
+    OPTIONAL MATCH (me:User{userId: '${userId}'})-[f:FOLLOWS]->(u)
+    RETURN u AS user, count(DISTINCT f) as isFollowing, l.createdAt AS createdAt
+    ORDER BY isFollowing DESC, createdAt DESC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}
+  `;
+
+  const graphRes = await graphDb.query(query);
+
+  const data = graphRes._results;
+  const likesList = [];
+
+  debug(data);
+
+  for (let i = 0; i < data.length; i++) {
+    const user = data[i]._values[0].properties;
+    const isFollowingCount = data[i]._values[1];
+
+    let isFollowing;
+    isFollowingCount > 0 ? isFollowing = true : isFollowing = false;
+
+    debug(`Liked: ${user.username} / isFollowingCount: ${isFollowingCount}`);
+
+    const follower = {
+      userId: user.userId,
+      username: user.username,
+      name: user.name,
+      avatar: user.avatar,
+      isFollowing: isFollowing
+    };
+
+    likesList.push(follower);
+  }
+
+  return likesList;
 
 };

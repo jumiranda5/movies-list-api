@@ -143,6 +143,19 @@
     - Route: POST /api/post/add/:type
     - Response: { message: '' }
 
+  * Get Likes =>
+    - Route: GET /api/post/likes/:postId
+    - Response: {
+      message: '',
+        result: {
+          userId: '',
+          username: '',
+          name: '',
+          avatar: '',
+          isFollowing: boolean
+        }
+      }
+
 #
 
 # TODO: (controllers)

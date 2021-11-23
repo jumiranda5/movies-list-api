@@ -33,6 +33,7 @@ import { search_tmdb_tv } from './controllers/tmdb/search_tv_controller';
 
 // Post
 import { add_post } from './controllers/post/add_post_controller';
+import { get_likes } from './controllers/post/get_likes_controller';
 
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
@@ -74,6 +75,7 @@ router.get('/api/tmdb/search/tv/:query/:page/:lang', [requireLogin, validateSear
 router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_movie);
 
 /* -------- POSTS -------- */
+router.get('/api/post/likes/:postId/:page', requireLogin, get_likes);
 router.post('/api/post/add/:type', requireLogin, add_post);
 
 /* -------- Top 10 -------- */

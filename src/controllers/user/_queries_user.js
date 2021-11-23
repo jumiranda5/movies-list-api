@@ -176,6 +176,7 @@ export const getUserPosts = async (userId) => {
 
   for (let i = 0; i < posts.length; i++) {
     const post = {
+      postId: posts[i]._id,
       postType: posts[i].post_type,
       mediaType: posts[i].media_type,
       reaction: posts[i].reaction || null,
