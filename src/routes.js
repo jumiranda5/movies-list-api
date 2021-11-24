@@ -34,6 +34,9 @@ import { search_tmdb_tv } from './controllers/tmdb/search_tv_controller';
 // Post
 import { add_post } from './controllers/post/add_post_controller';
 import { get_likes } from './controllers/post/get_likes_controller';
+import { feed } from './controllers/post/feed_controller';
+import { like } from './controllers/post/like_controller';
+import { delete_like } from './controllers/post/delete_like_controller';
 
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
@@ -75,10 +78,15 @@ router.get('/api/tmdb/search/tv/:query/:page/:lang', [requireLogin, validateSear
 router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_movie);
 
 /* -------- POSTS -------- */
+router.get('/api/post/feed/:page', requireLogin, feed);
 router.get('/api/post/likes/:postId/:page', requireLogin, get_likes);
 router.post('/api/post/add/:type', requireLogin, add_post);
+/* -------- LIKES -------- */
+router.post('/api/like/create/:postId/:type', like);
+router.post('/api/like/delete/:postId/:type', delete_like);
 
 /* -------- Top 10 -------- */
 router.get('/api/top10/:type', requireLogin, top10);
+
 
 module.exports = router;
