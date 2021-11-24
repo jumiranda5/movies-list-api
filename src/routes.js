@@ -33,6 +33,7 @@ import { search_tmdb_tv } from './controllers/tmdb/search_tv_controller';
 
 // Post
 import { add_post } from './controllers/post/add_post_controller';
+import { delete_post } from './controllers/post/delete_post_controller';
 import { get_likes } from './controllers/post/get_likes_controller';
 import { feed } from './controllers/post/feed_controller';
 import { like } from './controllers/post/like_controller';
@@ -81,9 +82,9 @@ router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, validateS
 router.get('/api/post/feed/:page', requireLogin, feed);
 router.get('/api/post/likes/:postId/:page', requireLogin, get_likes);
 router.post('/api/post/add/:type', requireLogin, add_post);
-/* -------- LIKES -------- */
 router.post('/api/like/create/:postId/:type', like);
 router.post('/api/like/delete/:postId/:type', delete_like);
+router.post('/api/post/delete/:postId', requireLogin, delete_post);
 
 /* -------- Top 10 -------- */
 router.get('/api/top10/:type', requireLogin, top10);
