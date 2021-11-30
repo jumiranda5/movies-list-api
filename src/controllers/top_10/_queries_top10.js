@@ -15,7 +15,7 @@ export const findTop10 = async (userId, type) => {
   else if (type ==='tv') top10Obj = ['series'];
   else top10Obj = ['movies', 'series'];
 
-  const top10 = await Top10.findOne({belongs_to: userId}, top10Obj).exec();
+  const top10 = await Top10.findOne({_id: userId}, top10Obj).exec();
 
   if (top10 !== null) {
     debug(`top 10 document found.`);
