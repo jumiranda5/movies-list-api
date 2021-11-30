@@ -1,7 +1,7 @@
 import Post from '../../database/models/post_model';
 import Top10 from '../../database/models/top10_model';
 import { graphDb } from '../../database/graphConfig';
-import { graphUserObject, graphRecommendations } from '../../helpers/response_helper';
+import { graphUserObject } from '../../helpers/response_helper';
 const debug = require('debug')('app:post');
 
 /* ================================================================================================
@@ -303,8 +303,79 @@ export const deleteLike = async (from, to, type) => {
 
 export const getFeedGraph = async (userId, page) => {
 
-  const nPerPage = 10;
+  const nPerPage = 15;
   const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
+
+  const query = `
+    MATCH (n:User{userId:'${userId}'})-[f:FOLLOWS*0..1]->(following:User)-[:POSTED]->(post)
+    OPTIONAL MATCH (:User)-[l:LIKED]->(post)
+    OPTIONAL MATCH (:Comment)-[c:TO]->(post)
+    OPTIONAL MATCH (n)-[nl:LIKED]->(post)
+    RETURN post, following,
+        count(DISTINCT l) AS likeCount,
+        count(DISTINCT c) AS commentCount,
+        count(DISTINCT nl) AS isLiking
+    ORDER BY post.createdAt DESC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}
+  `;
+
+  try {
+    const graphRes = await graphDb.query(query);
+    const results = graphRes._results;
+
+    const feed = [];
+    const posts = [];
+
+    const feedInfo = {
+      posts,
+      feed
+    };
+
+    debug(results);
+
+    for (let i = 0; i < results.length; i++) {
+
+      const post = results[i]._values[0].properties.postId;
+      const createdAt = results[i]._values[0].properties.createdAt;
+      const user = results[i]._values[1].properties;
+      const likeCount = results[i]._values[2];
+      const commentCount = results[i]._values[3];
+      const isLikingInt = results[i]._values[4];
+
+      let isLiking;
+      if (isLikingInt > 0) isLiking = true;
+      else isLiking = false;
+
+      posts.push(post);
+
+      const userObject = graphUserObject(user);
+
+      const feedItem = {
+        post,
+        createdAt,
+        user: userObject,
+        likeCount,
+        commentCount,
+        isLiking,
+        isOwnPost: false
+      };
+
+      feed.push(feedItem);
+
+    }
+
+    return feedInfo;
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+};
+
+/*
+
+  FEED WITH RECOMMENDATIONS (FOR FUTURE IMPLEMENTATION - REMOVED IT FOR NOW);
 
   const query = `
   MATCH (n:User{userId:'${userId}'})-[f:FOLLOWS*0..1]->(following:User)-[:POSTED]->(post)
@@ -331,60 +402,6 @@ export const getFeedGraph = async (userId, page) => {
   ORDER BY post.createdAt DESC
   SKIP ${nSkip}
   LIMIT ${nPerPage}
-`;
+  `;
 
-  try {
-    const graphRes = await graphDb.query(query);
-    const results = graphRes._results;
-
-    const feed = [];
-    const posts = [];
-
-    const feedInfo = {
-      posts,
-      feed
-    };
-
-    debug(results);
-
-    for (let i = 0; i < results.length; i++) {
-
-      const post = results[i]._values[0].properties.postId;
-      const createdAt = results[i]._values[0].properties.createdAt;
-      const user = results[i]._values[1].properties;
-      const recs = results[i]._values[2];
-      const likeCount = results[i]._values[3];
-      const commentCount = results[i]._values[4];
-      const isLikingInt = results[i]._values[5];
-
-      let isLiking;
-      if (isLikingInt > 0) isLiking = true;
-      else isLiking = false;
-
-      posts.push(post);
-
-      const userObject = graphUserObject(user);
-      const recommendations = graphRecommendations(recs, userId);
-
-      const feedItem = {
-        post,
-        createdAt,
-        user: userObject,
-        recommendations,
-        likeCount,
-        commentCount,
-        isLiking,
-        isOwnPost: false
-      };
-
-      feed.push(feedItem);
-
-    }
-
-    return feedInfo;
-  }
-  catch (error) {
-    debug(error);
-    throw error;
-  }
-};
+*/
