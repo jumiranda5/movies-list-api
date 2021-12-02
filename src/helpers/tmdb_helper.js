@@ -1,5 +1,5 @@
 import tmdb from '../config_tmdb';
-//const debug = require('debug')('app:tmdb_helper');
+const debug = require('debug')('app:tmdb_helper');
 
 /* ========== SEARCH ITEM OBJECT ========== */
 
@@ -92,12 +92,12 @@ export const searchResults = (responseData, lang, savedMovies, savedSeries, type
 
 export const getMediaObject = (data, lang, type) => {
 
-  //debug('Building media object...');
+  //debug(data);
 
   const site_url = tmdb.site_url;
   const image_base_url = tmdb.images.secure_base_url;
   const logo_size = tmdb.images.logo_sizes[1];
-  const poster_size = tmdb.images.poster_sizes[3];
+  const poster_size = tmdb.images.poster_sizes[4];
 
   // GENRES
   const genresObjArray = data.genres;
@@ -281,7 +281,9 @@ export const getMainTrailer = (trailerObjArray) => {
         trailers.sort((a,b) => { return a.priority - b.priority; });
         trailers.reverse();
 
-        resolve(trailers[0]);
+        //debug(trailers);
+
+        resolve(trailers);
       }
       catch(error) {
         reject(error);
