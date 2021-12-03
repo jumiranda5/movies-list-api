@@ -45,11 +45,14 @@ export const getAllReactions = async (tmdb_id) => {
     const res = await graphDb.query(query);
     const data = res._results;
     const reactions = [];
+    let totalReactions = 0;
+
 
     for (let i = 0; i < data.length; i++) {
 
       const reaction_name = data[i]._values[0];
       const reaction_count = data[i]._values[1];
+      totalReactions = totalReactions + reaction_count;
 
       const reaction = {
         reaction: reaction_name,
@@ -60,7 +63,12 @@ export const getAllReactions = async (tmdb_id) => {
 
     }
 
-    return reactions;
+    const reactionData = {
+      reactions: reactions,
+      total: totalReactions
+    };
+
+    return reactionData;
   }
   catch (error) {
     debug(error);
@@ -81,11 +89,13 @@ export const getFollowingReactions = async (tmdb_id, userId) => {
     const res = await graphDb.query(query);
     const data = res._results;
     const reactions = [];
+    let totalReactions = 0;
 
     for (let i = 0; i < data.length; i++) {
 
       const reaction_name = data[i]._values[0];
       const reaction_count = data[i]._values[1];
+      totalReactions = totalReactions + reaction_count;
 
       const reaction = {
         reaction: reaction_name,
@@ -96,7 +106,12 @@ export const getFollowingReactions = async (tmdb_id, userId) => {
 
     }
 
-    return reactions;
+    const reactionData = {
+      reactions: reactions,
+      total: totalReactions
+    };
+
+    return reactionData;
   }
   catch (error) {
     debug(error);

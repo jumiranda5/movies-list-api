@@ -99,10 +99,20 @@ export const tmdb_item = async (req, res, next) => {
     if (type === 'tv' && watchlist.series.find(doc => doc._id === itemId)) isBookmarked = true;
     debug(`Is bookmarked: ${isBookmarked}`);
 
+    // Reactions - following
+    const following_reactions_array = following_reactions.reactions;
+    const following_reactions_total = following_reactions.total;
+
+    // Reactions - App
+    const app_reactions_array = app_reactions.reactions;
+    const app_reactions_total = app_reactions.total;
+
     return res.json({
       message: message,
-      appReactions: app_reactions,
-      followingReactions: following_reactions,
+      appReactions: app_reactions_array,
+      appReactionsTotal: app_reactions_total,
+      followingReactions: following_reactions_array,
+      followingReactionsTotal: following_reactions_total,
       tmdbResponse: data,
       trailer: trailerResponse,
       providers: providers,

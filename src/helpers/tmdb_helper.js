@@ -120,12 +120,12 @@ export const getMediaObject = (data, lang, type) => {
     creators.push(creatorsObjArray[i].name);
   }
 
-  // NETWORKS
-  const networks = data.networks || [];
-  for (let i = 0; i < networks.length; i++) {
-    const logo_path = networks[i].logo_path;
-    networks[i].logo_path = `${image_base_url}${logo_size}${logo_path}`;
-  }
+  // NETWORKS - removed for now...
+  //const networks = data.networks || [];
+  //for (let i = 0; i < networks.length; i++) {
+  //  const logo_path = networks[i].logo_path;
+  //  networks[i].logo_path = `${image_base_url}${logo_size}${logo_path}`;
+  //}
 
   return new Promise((resolve, reject) => {
     try {
@@ -140,7 +140,7 @@ export const getMediaObject = (data, lang, type) => {
       const obj = {
         id: data.id,
         genres: genres,
-        homepage: data.homepage,
+        homepage: data.homepage || null,
         status: data.status,
         title: data.title || data.name,
         original_title: original_title,
@@ -150,8 +150,7 @@ export const getMediaObject = (data, lang, type) => {
         release_year: year,
         tmdb_link: `${site_url}/${type}/${data.id}-${link_original_name}?language=${lang}`,
         created_by: creators || [],
-        number_of_seasons: data.number_of_seasons || '',
-        networks: networks,
+        number_of_seasons: data.number_of_seasons || 0
       };
 
       resolve(obj);

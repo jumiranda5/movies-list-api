@@ -78,7 +78,7 @@ router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_it
 router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_multi);
 router.get('/api/tmdb/search/tv/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_tv);
 router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_movie);
-router.get('/api/tmdb/item/:type/:itemId/:lang', requireLogin, tmdb_item);
+router.get('/api/tmdb/item/:type/:itemId/:lang', tmdb_item);
 
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', requireLogin, feed);
