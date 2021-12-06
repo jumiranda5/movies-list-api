@@ -1,5 +1,6 @@
 import Watchlist from '../../database/models/watchlist_model';
 import { graphDb } from '../../database/graphConfig';
+import { graphUserObject } from '../../helpers/response_helper';
 const debug = require('debug')('app:tmdb-queries');
 
 /* ================================================================================================
@@ -80,7 +81,7 @@ export const getAllReactions = async (tmdb_id) => {
 export const getFollowingReactions = async (tmdb_id, userId) => {
 
   const query = `
-    MATCH (user:User { userId: '${userId}'})-[f:FOLLOWS]->(u:User)-[r:REACTED]->(t:Title { titleId: '${tmdb_id}'})
+    MATCH (user:User { userId: '${userId}'})-[f:FOLLOWS*0..1]->(u:User)-[r:REACTED]->(t:Title { titleId: '${tmdb_id}'})
     RETURN r.reaction AS type, COUNT(r) AS count
     ORDER BY count DESC
   `;
@@ -120,3 +121,91 @@ export const getFollowingReactions = async (tmdb_id, userId) => {
 
 };
 
+export const getAllReactionsUsers = async (tmdb_id, page) => {
+
+  const nPerPage = 20;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
+
+  const query = `
+    MATCH (u:User)-[r:REACTED]->(t:Title { titleId: '${tmdb_id}' })
+    RETURN u AS user, r.reaction AS reaction
+    ORDER BY r.createdAt DESC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}
+  `;
+
+  try {
+    const res = await graphDb.query(query);
+    const data = res._results;
+    const reactions = [];
+
+    debug(res);
+
+    for (let i = 0; i < data.length; i++) {
+
+      const userGraph = data[i]._values[0].properties;
+      const reaction = data[i]._values[1];
+
+      const user = graphUserObject(userGraph);
+
+      const item = {
+        reaction,
+        user
+      };
+
+      debug(reaction);
+
+      reactions.push(item);
+
+    }
+
+    return reactions;
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+};
+
+export const getFollowingReactionsUsers = async (tmdb_id, user_id, page) => {
+
+  const nPerPage = 20;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
+
+  const query = `
+    MATCH (:User { userId: '${user_id}'})-[f:FOLLOWS*0..1]->(u:User)-[r:REACTED]->(t:Title { titleId: '${tmdb_id}'})
+    RETURN u AS user, r.reaction AS reaction
+    ORDER BY r.createdAt DESC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}
+  `;
+
+  try {
+    const res = await graphDb.query(query);
+    const data = res._results;
+    const reactions = [];
+
+    for (let i = 0; i < data.length; i++) {
+
+      const userGraph = data[i]._values[0].properties;
+      const reaction = data[i]._values[1];
+
+      const user = graphUserObject(userGraph);
+
+      const item = {
+        reaction,
+        user
+      };
+
+      reactions.push(item);
+
+    }
+
+    return reactions;
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+};

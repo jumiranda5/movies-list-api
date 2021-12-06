@@ -31,6 +31,7 @@ import { search_tmdb_multi } from './controllers/tmdb/search_multi_controller';
 import { search_tmdb_movie } from './controllers/tmdb/search_movie_controller';
 import { search_tmdb_tv } from './controllers/tmdb/search_tv_controller';
 import { tmdb_item } from './controllers/tmdb/tmdb_item_controller';
+import { reactions_users } from './controllers/tmdb/reactions_controller';
 
 // Post
 import { add_post } from './controllers/post/add_post_controller';
@@ -78,7 +79,8 @@ router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_it
 router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_multi);
 router.get('/api/tmdb/search/tv/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_tv);
 router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_movie);
-router.get('/api/tmdb/item/:type/:itemId/:lang', tmdb_item);
+router.get('/api/tmdb/item/:type/:itemId/:lang', requireLogin, tmdb_item);
+router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', requireLogin, reactions_users);
 
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', requireLogin, feed);
