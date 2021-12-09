@@ -4,8 +4,9 @@ import { verifyAccessToken } from '../../helpers/token_helper';
 
 export const get_likes = async (req, res, next) => {
 
-  const postId = req.params.postId;
+  const id = req.params.id;
   const page = req.params.page;
+  const type = req.params.type; // post || comment
   const accessToken = req.headers['x-access-token'];
 
   try {
@@ -13,7 +14,7 @@ export const get_likes = async (req, res, next) => {
     const dec = await verifyAccessToken(accessToken);
     const userId = dec.userId;
 
-    const likesList = await findLikes(postId, userId, page);
+    const likesList = await findLikes(id, userId, page, type);
 
     return res.json({
       message: 'Success',

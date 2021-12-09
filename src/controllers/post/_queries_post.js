@@ -196,109 +196,6 @@ export const deletePostNode = async (postId) => {
 
 };
 
-// Likes
-
-export const findLikes = async (postId, userId, page) => {
-
-  const nPerPage = 20;
-  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
-
-  const query = `
-    MATCH (u:User)-[l:LIKED]->(p:Post{postId:'${postId}'})
-    OPTIONAL MATCH (me:User{userId: '${userId}'})-[f:FOLLOWS]->(u)
-    RETURN u AS user, count(DISTINCT f) as isFollowing, l.createdAt AS createdAt
-    ORDER BY isFollowing DESC, createdAt DESC
-    SKIP ${nSkip}
-    LIMIT ${nPerPage}
-  `;
-
-  const graphRes = await graphDb.query(query);
-
-  const data = graphRes._results;
-  const likesList = [];
-
-  debug(data);
-
-  for (let i = 0; i < data.length; i++) {
-    const user = data[i]._values[0].properties;
-    const isFollowingCount = data[i]._values[1];
-
-    let isFollowing;
-    isFollowingCount > 0 ? isFollowing = true : isFollowing = false;
-
-    debug(`Liked: ${user.username} / isFollowingCount: ${isFollowingCount}`);
-
-    const follower = {
-      userId: user.userId,
-      username: user.username,
-      name: user.name,
-      avatar: user.avatar,
-      isFollowing: isFollowing
-    };
-
-    likesList.push(follower);
-  }
-
-  return likesList;
-
-};
-
-export const createLike = async (from, to, type) => {
-
-  const createdAt = Date.now();
-
-  let query;
-
-  if (type === 'post') {
-    query = `MATCH (from:User), (to:Post)
-    WHERE from.userId = '${from}' AND to.postId = '${to}'
-    CREATE (from)-[r:LIKED]->(to)
-    SET r.createdAt ='${createdAt}'`;
-  }
-  else if (type === 'comment') {
-    query = `MATCH (from:User), (to:Comment)
-    WHERE from.userId = '${from}' AND to.commentId = '${to}'
-    CREATE (from)-[r:LIKED]->(to)
-    SET r.createdAt ='${createdAt}'`;
-  }
-
-  try {
-    debug('Creating like edge...');
-    await graphDb.query(query);
-    debug('...done');
-  }
-  catch (error) {
-    debug(error);
-    throw error;
-  }
-
-};
-
-export const deleteLike = async (from, to, type) => {
-
-  let query;
-
-  if (type === 'post') {
-    query = `MATCH (from:User {userId: '${from}'})-[r:LIKED]->(to:Post {postId: '${to}'})
-    DELETE r`;
-  }
-  else if (type === 'comment') {
-    query = `MATCH (from:User {userId: '${from}'})-[r:LIKED]->(to:Comment {commentId: '${to}'})
-    DELETE r`;
-  }
-
-  try {
-    debug('Deleting like edge...');
-    await graphDb.query(query);
-    debug('...done');
-  }
-  catch (error) {
-    debug(error);
-    throw error;
-  }
-
-};
-
 // Feed
 
 export const getFeedGraph = async (userId, page) => {
@@ -405,3 +302,238 @@ export const getFeedGraph = async (userId, page) => {
   `;
 
 */
+
+/* ================================================================================================
+
+                                          LIKE - GRAPH
+
+================================================================================================= */
+
+// Likes
+
+export const findLikes = async (id, userId, page, type) => {
+
+  const nPerPage = 20;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
+
+  let query;
+
+  const queryComment = `
+    MATCH (u:User)-[l:LIKED]->(c:Comment{commentId:'${id}'})
+    OPTIONAL MATCH (me:User{userId: '${userId}'})-[f:FOLLOWS]->(u)
+    RETURN u AS user, count(DISTINCT f) as isFollowing, l.createdAt AS createdAt
+    ORDER BY isFollowing DESC, createdAt DESC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}
+  `;
+
+  const queryPost = `
+    MATCH (u:User)-[l:LIKED]->(p:Post{postId:'${id}'})
+    OPTIONAL MATCH (me:User{userId: '${userId}'})-[f:FOLLOWS]->(u)
+    RETURN u AS user, count(DISTINCT f) as isFollowing, l.createdAt AS createdAt
+    ORDER BY isFollowing DESC, createdAt DESC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}
+  `;
+
+  if (type === "post") query = queryPost;
+  else query = queryComment;
+
+  const graphRes = await graphDb.query(query);
+
+  const data = graphRes._results;
+  const likesList = [];
+
+  debug(data);
+
+  for (let i = 0; i < data.length; i++) {
+    const user = data[i]._values[0].properties;
+    const isFollowingCount = data[i]._values[1];
+
+    let isFollowing;
+    isFollowingCount > 0 ? isFollowing = true : isFollowing = false;
+
+    debug(`Liked: ${user.username} / isFollowingCount: ${isFollowingCount}`);
+
+    const follower = {
+      userId: user.userId,
+      username: user.username,
+      name: user.name,
+      avatar: user.avatar,
+      isFollowing: isFollowing
+    };
+
+    likesList.push(follower);
+  }
+
+  return likesList;
+
+};
+
+export const createLike = async (from, to, type) => {
+
+  const createdAt = Date.now();
+
+  let query;
+
+  if (type === 'post') {
+    query = `MATCH (from:User), (to:Post)
+    WHERE from.userId = '${from}' AND to.postId = '${to}'
+    CREATE (from)-[r:LIKED]->(to)
+    SET r.createdAt ='${createdAt}'`;
+  }
+  else if (type === 'comment') {
+    query = `MATCH (from:User), (to:Comment)
+    WHERE from.userId = '${from}' AND to.commentId = '${to}'
+    CREATE (from)-[r:LIKED]->(to)
+    SET r.createdAt ='${createdAt}'`;
+  }
+
+  try {
+    debug('Creating like edge...');
+    await graphDb.query(query);
+    debug('...done');
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+};
+
+export const deleteLike = async (from, to, type) => {
+
+  let query;
+
+  if (type === 'post') {
+    query = `MATCH (from:User {userId: '${from}'})-[r:LIKED]->(to:Post {postId: '${to}'})
+    DELETE r`;
+  }
+  else if (type === 'comment') {
+    query = `MATCH (from:User {userId: '${from}'})-[r:LIKED]->(to:Comment {commentId: '${to}'})
+    DELETE r`;
+  }
+
+  try {
+    debug('Deleting like edge...');
+    await graphDb.query(query);
+    debug('...done');
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+};
+
+/* ================================================================================================
+
+                                        COMMENT - GRAPH
+
+================================================================================================= */
+
+export const createComment = async (userId, postId, comment, commentId) => {
+
+  const createdAt = Date.now();
+
+  const query =
+   `MATCH (u:User), (p:Post)
+    WHERE u.userId = '${userId}' AND p.postId = '${postId}'
+    CREATE (c:Comment {commentId: '${commentId}', comment: '${comment}', createdAt:'${createdAt}'})
+    CREATE (u)-[:COMMENTED]->(c)-[:TO]->(p)`
+  ;
+
+  try {
+    debug('Creating comment on graph...');
+    const comment = await graphDb.query(query);
+    debug('...done');
+    return comment._results;
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+};
+
+export const deleteComment = async (commentId) => {
+
+  const query =
+   `MATCH (c:Comment)
+    WHERE c.commentId = '${commentId}'
+    DETACH DELETE c`
+  ;
+
+  try {
+    debug('Deleting comment...');
+    const comment = await graphDb.query(query);
+    debug('...done');
+    return comment._results;
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+};
+
+export const getComments = async (postId, userId) => {
+
+  // TODO: order by like count?
+
+  const query =
+    `MATCH (u:User)-[:COMMENTED]->(c:Comment)-[:TO]->(p:Post {postId: '${postId}'})
+    OPTIONAL MATCH (:User)-[l:LIKED]->(c)
+    OPTIONAL MATCH (:User {userId: '${userId}'})-[l2:LIKED]->(c)
+    WITH u, c, p, count(l) AS likes, count(l2) AS isLiking
+    RETURN collect([u, c, likes, isLiking]) AS comment
+    ORDER BY c.createdAt ASC`
+  ;
+
+  debug('Getting comments...');
+  const graphRes = await graphDb.query(query);
+  debug('...done');
+
+  const results = graphRes._results;
+  debug(results);
+
+  const comments = [];
+
+  for (let i = 0; i < results.length; i++) {
+
+    const user = {
+      userId: results[i]._values[0][0][0].properties.userId,
+      username: results[i]._values[0][0][0].properties.username,
+      name: results[i]._values[0][0][0].properties.name,
+      avatar: results[i]._values[0][0][0].properties.avatar
+    };
+
+    const commentId = results[i]._values[0][0][1].properties.commentId;
+    const comment = results[i]._values[0][0][1].properties.comment;
+    const createdAt = results[i]._values[0][0][1].properties.createdAt;
+    const likes = results[i]._values[0][0][2];
+    const liking = results[i]._values[0][0][3];
+
+    let isLiking;
+
+    if (liking > 0) isLiking = true;
+    else isLiking = false;
+
+    debug(likes);
+
+    const commentObj = {
+      user,
+      commentId,
+      comment,
+      createdAt,
+      likeCount: likes,
+      isLiking
+    };
+
+    comments.push(commentObj);
+
+  }
+
+  return comments;
+
+};

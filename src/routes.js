@@ -40,6 +40,7 @@ import { get_likes } from './controllers/post/get_likes_controller';
 import { feed } from './controllers/post/feed_controller';
 import { like } from './controllers/post/like_controller';
 import { delete_like } from './controllers/post/delete_like_controller';
+import { comments } from './controllers/post/comments';
 
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
@@ -84,11 +85,12 @@ router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', requireLogin, rea
 
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', requireLogin, feed);
-router.get('/api/post/likes/:postId/:page', requireLogin, get_likes);
+router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
 router.post('/api/post/add/:type', requireLogin, add_post);
+router.post('/api/post/delete/:postId', requireLogin, delete_post);
 router.post('/api/like/create/:postId/:type', like);
 router.post('/api/like/delete/:postId/:type', delete_like);
-router.post('/api/post/delete/:postId', requireLogin, delete_post);
+router.get('/api/comment/all/:postId', comments); // todo: access token && pagination
 
 /* -------- Top 10 -------- */
 router.get('/api/top10/:type', requireLogin, top10);
