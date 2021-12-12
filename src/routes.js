@@ -45,6 +45,9 @@ import { comments } from './controllers/post/comments';
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
 
+// Test fcm
+import { send_notification } from './controllers/fcm_controller';
+
 // Middlewares
 import { validateSignUp, validateSearchUser, validateSearch } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
@@ -94,6 +97,9 @@ router.get('/api/comment/all/:postId', comments); // todo: access token && pagin
 
 /* -------- Top 10 -------- */
 router.get('/api/top10/:type', requireLogin, top10);
+
+// fcm test route
+router.post('/api/fcm/:registrationToken', send_notification);
 
 
 module.exports = router;
