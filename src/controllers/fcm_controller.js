@@ -9,7 +9,7 @@ export const send_notification = async (req, res, next) => {
   //const messageType = req.body.messageType
 
   const notification_options = {
-    priority: "high"
+    priority: "normal"
   };
 
   // See documentation on defining a message payload.

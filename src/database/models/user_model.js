@@ -38,6 +38,14 @@ const UserSchema = new Schema({
     default: '',
     trim: true
   },
+  seen_notifications: {
+    type: Date,
+    default: Date.now(),
+  },
+  fcm_token: {
+    type: String,
+    default: ''
+  },
   isPrivate:{
     type: Boolean,
     default: false

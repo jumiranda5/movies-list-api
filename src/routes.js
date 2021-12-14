@@ -91,7 +91,7 @@ router.get('/api/post/feed/:page', requireLogin, feed);
 router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
 router.post('/api/post/add/:type', requireLogin, add_post);
 router.post('/api/post/delete/:postId', requireLogin, delete_post);
-router.post('/api/like/create/:postId/:type', like);
+router.post('/api/like/create/:postId/:type/:targetUserId', like);
 router.post('/api/like/delete/:postId/:type', delete_like);
 router.get('/api/comment/all/:postId', comments); // todo: access token && pagination
 

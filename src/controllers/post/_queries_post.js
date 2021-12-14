@@ -1,5 +1,7 @@
 import Post from '../../database/models/post_model';
 import Top10 from '../../database/models/top10_model';
+import Notification from '../../database/models/notifications_model';
+import User from '../../database/models/user_model';
 import { graphDb } from '../../database/graphConfig';
 import { graphUserObject } from '../../helpers/response_helper';
 const debug = require('debug')('app:post');
@@ -535,5 +537,62 @@ export const getComments = async (postId, userId) => {
   }
 
   return comments;
+
+};
+
+/* ================================================================================================
+
+                                      NOTIFICATIONS - MONGO
+
+================================================================================================= */
+
+export const createNotification = async (userId, to, type) => {
+
+  // to = user id (follow) || post id (post, comment)
+
+  const notificationObj = {
+    type: type,
+    from: userId,
+    to: to
+  };
+
+  try {
+    await Notification.create(notificationObj);
+    debug(`${type} notification created.`);
+  }
+  catch (error) {
+
+    debug(`Error code: ${error.code}`);
+    debug(`Error message: ${error.message}`);
+
+    throw error;
+  }
+
+};
+
+export const findUserFcmToken = async (targetUserId) => {
+
+  try {
+    const userObj = ['username', 'fcm_token'];
+    debug('Find user sid...');
+    const user = await User.findById(targetUserId, userObj).exec();
+    debug('... done');
+
+    if (user !== null) {
+      debug(user);
+      debug(`User fcm token found: ${user.fcm_token}`);
+      return user;
+    }
+    else {
+      const err = new Error('Not found.');
+      err.status = 404;
+      err.message = 'User not found.';
+      return null;
+    }
+  }
+  catch(error) {
+    debug(error.message);
+    throw error;
+  }
 
 };
