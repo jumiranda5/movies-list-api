@@ -38,6 +38,10 @@ const UserSchema = new Schema({
     default: '',
     trim: true
   },
+  notifications_on: {
+    type: Boolean,
+    default: true,
+  },
   seen_notifications: {
     type: Date,
     default: Date.now(),

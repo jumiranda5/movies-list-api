@@ -1,4 +1,5 @@
 import User from '../../database/models/user_model';
+import Notification from '../../database/models/notifications_model';
 import { graphDb } from '../../database/graphConfig';
 const debug = require('debug')('app:auth-queries');
 
@@ -117,6 +118,18 @@ export const deleteUserDocument = async (userId) => {
   }
 };
 
+export const deleteNotifications = async (userId) => {
+
+  debug('Deleting notifications document...');
+  const del = await Notification.deleteMany({from: userId});
+  debug('...done');
+
+  const count = del.deletedCount;
+
+  return count;
+
+};
+
 /* ================================================================================================
 
                                     AUTH QUERIES - GRAPH
@@ -147,3 +160,20 @@ export const createUserNode = async (user, search) => {
 
 };
 
+export const deleteUserGraph = async (userId) => {
+
+  const query = `
+    MATCH (u:User {userId: '${userId}'})
+    OPTIONAL MATCH (u)-[f:FOLLOW]-(:User)
+    OPTIONAL MATCH (u)-[:POSTED]-(p:Post)
+    OPTIONAL MATCH (u)-[l:LIKED]-(n)
+    OPTIONAL MATCH (u)-[c:COMMENTED]-(n)
+    OPTIONAL MATCH (u)-[r:REACTED]-(n)
+    DELETE u, f, p, l, c, r
+  `;
+
+  debug('Deleting user graph...');
+  await graphDb.query(query);
+  debug('...done');
+
+};

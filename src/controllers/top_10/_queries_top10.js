@@ -27,3 +27,15 @@ export const findTop10 = async (userId, type) => {
   }
 
 };
+
+export const deleteTop10 = async (userId) => {
+
+  debug('Deleting top10 document...');
+  const del = await Top10.deleteOne({_id: userId});
+  debug('...done');
+
+  const count = del.deletedCount;
+
+  return count;
+
+}

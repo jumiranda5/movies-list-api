@@ -8,6 +8,7 @@ import { access } from './controllers/auth/access_controller';
 import { login } from './controllers/auth/login_controller';
 import { signup } from './controllers/auth/signup_controller';
 import { logout } from './controllers/auth/logout_controller';
+import { delete_account } from './controllers/auth/delete_account';
 
 // User
 import { search_user } from './controllers/user/search_user_controller';
@@ -61,6 +62,7 @@ router.get('/api', access);
 router.post('/api/login', login);
 router.post('/api/signup', validateSignUp, signup);
 router.post('/api/logout', requireLogin, logout);
+router.post('/api/delete-account', delete_account); // require login
 
 /* ------- USER ------- */
 router.get('/api/user/profile/:userId', requireLogin, profile);

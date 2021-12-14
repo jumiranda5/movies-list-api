@@ -1,5 +1,5 @@
 import Watchlist from '../../database/models/watchlist_model';
-//const debug = require('debug')('app:mongo');
+const debug = require('debug')('app:mongo');
 
 /* ================================================================================================
 
@@ -72,6 +72,16 @@ export const updateWatchlistDeleteItem = async (userId, mediaType, tmdb_id) => {
   }
 
 };
+
+export const deleteAllWatchlistDocuments = async (userId) => {
+  debug('Deleting user document...');
+  const del = await Watchlist.deleteMany({userId: userId});
+  debug('...done');
+
+  const count = del.deletedCount;
+
+  return count;
+}
 
 export const findWatchlist = async (userId) => {
 

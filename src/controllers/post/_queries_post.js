@@ -103,6 +103,16 @@ export const deletePostDocument = async (postId, userId) => {
 
 };
 
+export const deleteAllPostsDocuments = async (userId) => {
+  debug('Deleting user document...');
+  const del = await Post.deleteMany({userId: userId});
+  debug('...done');
+
+  const count = del.deletedCount;
+
+  return count;
+}
+
 /* ================================================================================================
 
                                           POST - GRAPH
