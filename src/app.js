@@ -9,6 +9,7 @@ import mongoose from 'mongoose';
 import { connectMongo } from './database/mongoConfig';
 import { closeGraph } from './database/graphConfig';
 const admin = require("firebase-admin");
+const path = require("path");
 
 
 const corsConfig = {
@@ -20,21 +21,8 @@ const corsConfig = {
 };
 
 // Firebase cloud messaging
-const serviceAccount = {
-  type: config.FIREBASE_CREDENTIALS.type,
-  project_id: config.FIREBASE_CREDENTIALS.project_id,
-  private_key_id: config.FIREBASE_CREDENTIALS.private_key_id,
-  private_key: config.FIREBASE_CREDENTIALS.private_key,
-  client_email: config.FIREBASE_CREDENTIALS.client_email,
-  client_id: config.FIREBASE_CREDENTIALS.client_id,
-  auth_uri: config.FIREBASE_CREDENTIALS.auth_uri,
-  token_uri: config.FIREBASE_CREDENTIALS.token_uri,
-  auth_provider_x509_cert_url: config.FIREBASE_CREDENTIALS.auth_provider_x509_cert_url,
-  client_x509_cert_url: config.FIREBASE_CREDENTIALS.client_x509_cert_url
-};
-
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(config.FIREBASE_CREDENTIALS)
 });
 
 // Instantiate the app
@@ -52,6 +40,10 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Views
+app.set('views', path.join(__dirname +  '/views'));
+app.set('view engine', 'pug');
 
 // include routes
 const routes = require('./routes');

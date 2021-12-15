@@ -3,6 +3,8 @@ const router = express.Router();
 
 // router callback functions:
 import { home } from './controllers/home_controller';
+import { terms } from './controllers/terms_controller';
+import { privacy } from './controllers/privacy_controller';
 // Auth
 import { access } from './controllers/auth/access_controller';
 import { login } from './controllers/auth/login_controller';
@@ -56,6 +58,8 @@ import { requireLogin } from './middlewares/requireLogin';
 
 /* ------- HOME ------- */
 router.get('/', home);
+router.get('/terms-of-use', terms);
+router.get('/privacy-policy', privacy);
 
 /* ------- AUTH ------- */
 router.get('/api', access);

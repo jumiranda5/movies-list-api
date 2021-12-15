@@ -4,6 +4,6 @@ export function home(req, res) {
 
   const message = "Hello, world!";
   debug(message);
-  return res.send(message);
+  return res.render('home');
 
 }
