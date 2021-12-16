@@ -10,9 +10,9 @@ export const delete_account = async (req, res) => {
 
   try {
 
-    //const accessToken = req.headers['x-access-token'];
-    //const dec = await verifyAccessToken(accessToken);
-    const userId = "616b009921f6b937d9e44741"; // dec.userId;
+    const accessToken = req.headers['x-access-token'];
+    const dec = await verifyAccessToken(accessToken);
+    const userId = dec.userId;
 
     // delete user, notifications, top10, posts, watchlist documents
     await deleteUserDocument(userId);

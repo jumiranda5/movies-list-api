@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
-//const debug = require('debug')('app:token');
+const debug = require('debug')('app:token');
 import config from '../config';
 const { TOKEN_SECRET } = config;
 
@@ -13,10 +13,9 @@ export const createAccessToken = (userId, sid) => {
   return new Promise((resolve, reject) => {
 
     try{
-      //debug('Creating access token...');
+      debug('Creating access token...');
       const payload = { userId, sid };
       const token = jwt.sign(payload, TOKEN_SECRET, {expiresIn: '7d'});
-      //debug('... done');
       resolve(token);
     }
     catch(error) {
@@ -32,11 +31,11 @@ export const verifyAccessToken = (accessToken) => {
   return new Promise((resolve, reject) => {
     try {
       const dec = jwt.verify(accessToken, TOKEN_SECRET);
-      //debug( `Access token verified.`);
+      debug( `Access token verified.`);
       resolve(dec);
     }
     catch (error) {
-      //debug("Invalid access token");
+      debug("Invalid access token");
       reject("Invalid token");
     }
   });
@@ -52,13 +51,13 @@ export const verifyGoogleToken = async (token) => {
     });
     const payload = ticket.getPayload();
     const userId = payload.sub;
-    //debug(`Google token verified.`);
+    debug(`Google token verified.`);
     return userId;
   }
   catch (error) {
-    //debug("Invalid google token");
+    debug("Invalid google token");
     const err = new Error('Invalid token.');
-    err.status = 401;
+    err.status = 403;
     throw err;
   }
 

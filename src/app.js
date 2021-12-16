@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Views
-app.set('views', path.join(__dirname +  '/views'));
+app.set('views', path.join(__dirname + '/views'));
 app.set('view engine', 'pug');
 
 // include routes

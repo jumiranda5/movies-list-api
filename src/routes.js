@@ -11,6 +11,7 @@ import { login } from './controllers/auth/login_controller';
 import { signup } from './controllers/auth/signup_controller';
 import { logout } from './controllers/auth/logout_controller';
 import { delete_account } from './controllers/auth/delete_account';
+import { save_fcm_token } from './controllers/auth/fcm_controller';
 
 // User
 import { search_user } from './controllers/user/search_user_controller';
@@ -49,7 +50,7 @@ import { comments } from './controllers/post/comments';
 import { top10 } from './controllers/top_10/top10_controller';
 
 // Test fcm
-import { send_notification } from './controllers/fcm_controller';
+import { send_notification } from './controllers/notification_controller';
 
 // Middlewares
 import { validateSignUp, validateSearchUser, validateSearch } from './middlewares/validation';
@@ -66,7 +67,8 @@ router.get('/api', access);
 router.post('/api/login', login);
 router.post('/api/signup', validateSignUp, signup);
 router.post('/api/logout', requireLogin, logout);
-router.post('/api/delete-account', delete_account); // require login
+router.post('/api/delete-account', requireLogin, delete_account);
+router.post('/api/save-fcm-token', save_fcm_token);
 
 /* ------- USER ------- */
 router.get('/api/user/profile/:userId', requireLogin, profile);

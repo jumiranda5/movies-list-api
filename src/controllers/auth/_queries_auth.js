@@ -97,6 +97,22 @@ export const updateUserSid = async (userId, sid) => {
 
 };
 
+export const updateUserFcmToken = async (googleId, fcm_token) => {
+
+  const query = { google_id: googleId };
+  const update = { $set: { fcm_token }};
+
+  try {
+    debug(`Updating user fcm token...`);
+    await User.findOneAndUpdate(query, update).exec();
+    debug(`...done`);
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+};
+
 // DELETE
 
 export const deleteUserDocument = async (userId) => {
@@ -164,12 +180,9 @@ export const deleteUserGraph = async (userId) => {
 
   const query = `
     MATCH (u:User {userId: '${userId}'})
-    OPTIONAL MATCH (u)-[f:FOLLOW]-(:User)
     OPTIONAL MATCH (u)-[:POSTED]-(p:Post)
-    OPTIONAL MATCH (u)-[l:LIKED]-(n)
-    OPTIONAL MATCH (u)-[c:COMMENTED]-(n)
-    OPTIONAL MATCH (u)-[r:REACTED]-(n)
-    DELETE u, f, p, l, c, r
+    OPTIONAL MATCH (u)-[:COMMENTED]-(c:Comment)
+    DETACH DELETE u, p, c
   `;
 
   debug('Deleting user graph...');

@@ -31,6 +31,9 @@ export const signup = async (req, res, next) => {
     const authToken = req.headers['x-auth-token'];
     const googleId = await verifyGoogleToken(authToken);
 
+    // Fcm
+    const fcmToken = req.headers['x-fcm-token'];
+
     // Create session id (sid)
     const sid = uuidv4();
 
@@ -40,7 +43,8 @@ export const signup = async (req, res, next) => {
       username: userData.username,
       email: userData.email,
       avatar: userData.avatar || '',
-      sid: sid
+      sid: sid,
+      fcm_token: fcmToken || ''
     };
 
     // Create user document and node
