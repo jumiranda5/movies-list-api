@@ -12,20 +12,16 @@ export const feed = async (req, res, next) => {
 
     const dec = await verifyAccessToken(accessToken);
     const userId = dec.userId;
-    //const userId = "616b003821f6b937d9e4473e";
 
     // Get feed graph
 
     debug('Get graph...');
     const feedGraph = await getFeedGraph(userId, page);
-    debug('...done');
-    debug(feedGraph);
 
     // Get posts documents from graph ids
 
     debug('Get posts documents...');
     const posts = await getPosts(feedGraph.posts);
-    debug('...done');
 
     // Reduce top 10 title objects from posts response
 

@@ -4,7 +4,7 @@ import Notification from '../../database/models/notifications_model';
 import User from '../../database/models/user_model';
 import { graphDb } from '../../database/graphConfig';
 import { graphUserObject } from '../../helpers/response_helper';
-const debug = require('debug')('app:post');
+const debug = require('debug')('app:post-queries');
 
 /* ================================================================================================
 
@@ -104,9 +104,9 @@ export const deletePostDocument = async (postId, userId) => {
 };
 
 export const deleteAllPostsDocuments = async (userId) => {
+
   debug('Deleting user document...');
   const del = await Post.deleteMany({userId: userId});
-  debug('...done');
 
   const count = del.deletedCount;
 
@@ -198,7 +198,6 @@ export const deletePostNode = async (postId) => {
   try {
     debug('Deleting post...');
     const post = await graphDb.query(query);
-    debug('...done');
     return post._results;
   }
   catch (error) {
@@ -241,7 +240,7 @@ export const getFeedGraph = async (userId, page) => {
       feed
     };
 
-    debug(results);
+    //debug(results);
 
     for (let i = 0; i < results.length; i++) {
 

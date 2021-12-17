@@ -6,16 +6,14 @@ import { searchResults } from '../../helpers/tmdb_helper';
 import { findWatchlist } from '../watchlist/_queries_watchlist';
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { isInputDataValid } from '../../middlewares/validation';
-//const debug = require('debug')('app:tmdb');
+const debug = require('debug')('app:tmdb');
 
 export const search_tmdb_multi = async (req, res, next) => {
 
   const api_key = config.TMDB_API_KEY;
-  const query = req.params.query;
+  const queryParam = req.params.query;
   const page = req.params.page;
   const lang = req.params.lang;
-
-  //debug(`QUERY=> ${query}`);
 
   // Validate search query
   const isDataValid = isInputDataValid(req);
@@ -26,10 +24,15 @@ export const search_tmdb_multi = async (req, res, next) => {
     return res.send({ message: err.message });
   }
 
+  // replace 'Ç' => not working on tmdb query
+  const query = queryParam.replace(/ç/gu, "c");
+
   const searchRoute = `${tmdb.base_url}/search/multi`;
   const key = `api_key=${api_key}`;
   const language = `language=${lang}`;
   const q = `query=${query}`;
+
+  debug(`QUERY=> ${query}`);
 
   const route = `${searchRoute}?${key}&${language}&page=${page}&include_adult=false&${q}`;
 
@@ -43,7 +46,6 @@ export const search_tmdb_multi = async (req, res, next) => {
     // Check if results are bookmarked
     const accessToken = req.headers['x-access-token'];
     const dec = await verifyAccessToken(accessToken);
-    //const userId = '616ae86bf2776e6bc04b805c';
     const watchlistDocument = await findWatchlist(dec.userId);
 
     let savedMovies = [];
@@ -59,7 +61,7 @@ export const search_tmdb_multi = async (req, res, next) => {
     if (responseData.length === 0) message = 'No results';
     else message = `Search result: ${total_results} found. ${responseData.length} Passed. Page ${page} of ${total_pages}`;
 
-    //debug(responseData);
+    debug(`${responseData.length} results.`);
 
     let isLastPage = false;
     if (page === total_pages) isLastPage = true;
@@ -71,7 +73,7 @@ export const search_tmdb_multi = async (req, res, next) => {
     });
   }
   catch(error) {
-    //debug(error);
+    debug(error);
     return next(error);
   }
 

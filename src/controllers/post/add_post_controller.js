@@ -4,7 +4,7 @@ import {
   createPostNode,
   createPostReaction } from './_queries_post';
 import { verifyAccessToken } from '../../helpers/token_helper';
-//const debug = require('debug')('app:post');
+const debug = require('debug')('app:post');
 
 export const add_post = async (req, res, next) => {
 
@@ -70,7 +70,7 @@ export const add_post = async (req, res, next) => {
     else if (postType === "top_10") postData = top10Data;
     else if (postType === "reaction") postData = reactionData;
 
-    //debug(postData);
+    debug(`Post data: ${JSON.stringify(postData)}`);
 
     const postDocument = await createPostDocument(postData);
 

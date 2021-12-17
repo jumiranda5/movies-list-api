@@ -13,7 +13,8 @@ export const titleObjectMini = (title) => {
   return {
     tmdb_id: title.tmdb_id,
     title: title.title,
-    poster: title.poster
+    poster: title.poster,
+    type: title.type
   };
 };
 
