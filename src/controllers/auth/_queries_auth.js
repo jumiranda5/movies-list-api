@@ -15,7 +15,6 @@ export const createUserDocument = async (userData) => {
   try {
     debug('Creating user document...');
     const newUser = await User.create(userData); // .create returns a promise so you shouldn't use .exec()
-    debug('... done'); // +120ms
     return newUser;
   }
   catch (error) {
@@ -37,7 +36,6 @@ export const findUserSid = async (userId) => {
     const userObj = ['sid'];
     debug('Find user sid...');
     const user = await User.findById(userId, userObj).exec();
-    debug('... done');
 
     if (user !== null) {
       debug(`User sid found: ${user.sid}`);
@@ -66,7 +64,6 @@ export const checkIfUserExists = async (googleId) => {
 
     debug(`Checking if user exists...`);
     const user = await User.findOne(query, userObj).exec();
-    debug(`...done`);
 
     return user;
 
@@ -88,7 +85,6 @@ export const updateUserSid = async (userId, sid) => {
   try {
     debug(`Updating user sid...`);
     await User.findOneAndUpdate(query, update).exec();
-    debug(`...done`);
   }
   catch (error) {
     debug(error);
@@ -105,7 +101,6 @@ export const updateUserFcmToken = async (googleId, fcm_token) => {
   try {
     debug(`Updating user fcm token...`);
     await User.findOneAndUpdate(query, update).exec();
-    debug(`...done`);
   }
   catch (error) {
     debug(error);
@@ -119,7 +114,6 @@ export const deleteUserDocument = async (userId) => {
 
   debug('Deleting user document...');
   const del = await User.deleteOne({_id: userId});
-  debug('...done');
 
   const count = del.deletedCount;
 
@@ -138,7 +132,6 @@ export const deleteNotifications = async (userId) => {
 
   debug('Deleting notifications document...');
   const del = await Notification.deleteMany({from: userId});
-  debug('...done');
 
   const count = del.deletedCount;
 
@@ -164,7 +157,6 @@ export const createUserNode = async (user, search) => {
         avatar: '${user.avatar}'
       }) RETURN n`
     );
-    debug('...done'); // +620ms
     debug(graphRes._results.length);
     if (graphRes._results.length > 0) return true;
     else return false;
@@ -187,6 +179,5 @@ export const deleteUserGraph = async (userId) => {
 
   debug('Deleting user graph...');
   await graphDb.query(query);
-  debug('...done');
 
 };

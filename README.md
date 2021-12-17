@@ -26,7 +26,9 @@
     - Route: POST /api/logout
     - Response: { message: '' }
 
-  * Delete account => #TODO
+  * Delete account => 
+    - Route: GET /api/delete-account
+    - Response: { message: '' }
   
 
 # USER:
