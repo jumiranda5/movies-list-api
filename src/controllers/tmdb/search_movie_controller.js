@@ -11,7 +11,7 @@ const debug = require('debug')('app:tmdb');
 export const search_tmdb_movie = async (req, res, next) => {
 
   const api_key = config.TMDB_API_KEY;
-  const query = req.params.query;
+  const queryParam = req.params.query;
   const page = req.params.page;
   const lang = req.params.lang;
 
@@ -23,6 +23,9 @@ export const search_tmdb_movie = async (req, res, next) => {
     res.status(err.status || 500);
     return res.send({ message: err.message });
   }
+
+  // replace 'Ç' => not working on tmdb query
+  const query = queryParam.replace(/ç/gu, "c");
 
   const searchRoute = `${tmdb.base_url}/search/movie`;
   const key = `api_key=${api_key}`;
