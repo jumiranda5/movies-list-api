@@ -14,12 +14,12 @@ export const like = async (req, res, next) => {
   const type = req.params.type; // post || comment
   const postId = req.params.postId; // post || comment id
   const targetUserId = req.params.targetUserId;
-  //const accessToken = req.headers['x-access-token'];
+  const accessToken = req.headers['x-access-token'];
 
   try {
 
-    //const dec = await verifyAccessToken(accessToken);
-    const userId = "616b003821f6b937d9e4473e";//dec.userId;
+    const dec = await verifyAccessToken(accessToken);
+    const userId = dec.userId;
 
     // create like in graph db
     debug('Create like on graph...');

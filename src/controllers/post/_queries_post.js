@@ -83,6 +83,13 @@ export const getPosts = async (ids) => {
 
 };
 
+export const getPost = async (postId) => {
+
+  const post = await Post.findById(postId).exec();
+  return post;
+
+}
+
 export const deletePostDocument = async (postId, userId) => {
 
   debug('Deleting post document...');
@@ -207,7 +214,54 @@ export const deletePostNode = async (postId) => {
 
 };
 
-// Feed
+export const getPostGraph = async (postId, userId) => {
+
+  const query = `
+    MATCH (user:User)-[:POSTED]->(post:Post{postId: '${postId}'})
+    OPTIONAL MATCH (:User)-[l:LIKED]->(post)
+    OPTIONAL MATCH (:Comment)-[c:TO]->(post)
+    OPTIONAL MATCH (u:User{userId:'${userId}'})-[ul:LIKED]->(post)
+    RETURN user, post,
+        count(DISTINCT l) AS likeCount,
+        count(DISTINCT c) AS commentCount,
+        count(DISTINCT ul) AS isLiking
+  `;
+
+  try {
+    const graphRes = await graphDb.query(query);
+    const results = graphRes._results;
+
+    debug(results);
+
+    const user = results[0]._values[0].properties;
+    const post = results[0]._values[1].properties.postId;
+    const likeCount = results[0]._values[2];
+    const commentCount = results[0]._values[3];
+    const isLikingInt = results[0]._values[4];
+
+    let isLiking;
+    if (isLikingInt > 0) isLiking = true;
+    else isLiking = false;
+
+    const userObject = graphUserObject(user);
+
+    const postItem = {
+      post,
+      user: userObject,
+      likeCount,
+      commentCount,
+      isLiking,
+      isOwnPost: false
+    };
+
+    return postItem;
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+}
 
 export const getFeedGraph = async (userId, page) => {
 

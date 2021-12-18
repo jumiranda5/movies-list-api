@@ -45,6 +45,7 @@ import { feed } from './controllers/post/feed_controller';
 import { like } from './controllers/post/like_controller';
 import { delete_like } from './controllers/post/delete_like_controller';
 import { comments } from './controllers/post/comments';
+import { post } from './controllers/post/post_controller';
 
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
@@ -97,6 +98,7 @@ router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', requireLogin, rea
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', requireLogin, feed);
 router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
+router.get('/api/post/:postId', requireLogin, post);
 router.post('/api/post/add/:type', requireLogin, add_post);
 router.post('/api/post/delete/:postId', requireLogin, delete_post);
 router.post('/api/like/create/:postId/:type/:targetUserId', like);
