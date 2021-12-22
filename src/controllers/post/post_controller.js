@@ -17,6 +17,7 @@ export const post = async (req, res, next) => {
 
     debug('Get post graph...');
     const feedGraph = await getPostGraph(postId, userId);
+    if (feedGraph.user.userId === userId) feedGraph.isOwnPost = true;
 
     // Get post document from graph ids
 

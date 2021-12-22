@@ -11,7 +11,7 @@ export const like = async (req, res, next) => {
       user => comment
   */
 
-  const type = req.params.type; // post || comment
+  const type = req.params.type; // post || comment (like type...)
   const postId = req.params.postId; // post || comment id
   const targetUserId = req.params.targetUserId;
   const accessToken = req.headers['x-access-token'];
@@ -27,7 +27,7 @@ export const like = async (req, res, next) => {
 
     // create notification document
     debug('Create notification document...');
-    await createNotification(userId, postId, type);
+    await createNotification(userId, postId, "like");
 
     // send push notification
     const user = await findUserFcmToken(targetUserId);
@@ -36,18 +36,22 @@ export const like = async (req, res, next) => {
     const notification_options = { priority: "normal" };
 
     // message payload.
+    /*
     const message = {
       notification: {
         body: `${user.username} liked your ${type}.`
       },
       data: {
         body: `${user.username} liked your ${type}.`
-      }
+      },
+      topic: "app"
     };
 
     admin.messaging()
       .sendToDevice(user.fcm_token, message, notification_options)
       .then( response => { debug('Push notification sent'); });
+
+    */
 
     return res.json({message: 'Success'});
 

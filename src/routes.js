@@ -45,7 +45,9 @@ import { feed } from './controllers/post/feed_controller';
 import { like } from './controllers/post/like_controller';
 import { delete_like } from './controllers/post/delete_like_controller';
 import { comments } from './controllers/post/comments';
+import { create_comment } from './controllers/post/create_comment';
 import { post } from './controllers/post/post_controller';
+import { delete_comment } from './controllers/post/delete_comment';
 
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
@@ -103,7 +105,9 @@ router.post('/api/post/add/:type', requireLogin, add_post);
 router.post('/api/post/delete/:postId', requireLogin, delete_post);
 router.post('/api/like/create/:postId/:type/:targetUserId', like);
 router.post('/api/like/delete/:postId/:type', delete_like);
-router.get('/api/comment/all/:postId', comments); // todo: access token && pagination
+router.get('/api/comment/all/:postId/:page', requireLogin, comments);
+router.post('/api/comment/create/:postId/:postUserId/:responseTo', requireLogin, create_comment);
+router.post('/api/comment/delete/:commentId', requireLogin, delete_comment);
 
 /* -------- Top 10 -------- */
 router.get('/api/top10/:type', requireLogin, top10);

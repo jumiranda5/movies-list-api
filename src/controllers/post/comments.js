@@ -6,6 +6,7 @@ export const comments = async (req, res, next) => {
 
   const accessToken = req.headers['x-access-token'];
   const postId = req.params.postId;
+  const page = req.params.page;
 
   debug(postId);
 
@@ -15,7 +16,7 @@ export const comments = async (req, res, next) => {
     const userId = dec.userId;
 
     debug('Get comments...');
-    const comments = await getComments(postId, userId);
+    const comments = await getComments(postId, userId, page);
     return res.json({message: 'Success', comments: comments});
 
   }
@@ -24,4 +25,4 @@ export const comments = async (req, res, next) => {
     return next(error);
   }
 
-}
+};

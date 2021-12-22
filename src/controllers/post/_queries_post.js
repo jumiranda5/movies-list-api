@@ -88,7 +88,7 @@ export const getPost = async (postId) => {
   const post = await Post.findById(postId).exec();
   return post;
 
-}
+};
 
 export const deletePostDocument = async (postId, userId) => {
 
@@ -118,7 +118,7 @@ export const deleteAllPostsDocuments = async (userId) => {
   const count = del.deletedCount;
 
   return count;
-}
+};
 
 /* ================================================================================================
 
@@ -261,7 +261,7 @@ export const getPostGraph = async (postId, userId) => {
     throw error;
   }
 
-}
+};
 
 export const getFeedGraph = async (userId, page) => {
 
@@ -497,22 +497,30 @@ export const deleteLike = async (from, to, type) => {
 
 ================================================================================================= */
 
-export const createComment = async (userId, postId, comment, commentId) => {
+export const createComment = async (userId, postId, comment, commentId, responseTo) => {
+
+  // responseTo: post || username
 
   const createdAt = Date.now();
 
   const query =
    `MATCH (u:User), (p:Post)
     WHERE u.userId = '${userId}' AND p.postId = '${postId}'
-    CREATE (c:Comment {commentId: '${commentId}', comment: '${comment}', createdAt:'${createdAt}'})
-    CREATE (u)-[:COMMENTED]->(c)-[:TO]->(p)`
+    CREATE (c:Comment {
+      commentId: '${commentId}',
+      responseTo: '${responseTo}',
+      comment: '${comment}',
+      createdAt:'${createdAt}'
+    })
+    CREATE (u)-[:COMMENTED]->(c)-[:TO]->(p)
+    RETURN c`
   ;
 
   try {
     debug('Creating comment on graph...');
     const comment = await graphDb.query(query);
-    debug('...done');
-    return comment._results;
+    debug(comment._results[0]._values[0].properties);
+    return comment._results[0]._values[0].properties;
   }
   catch (error) {
     debug(error);
@@ -531,9 +539,8 @@ export const deleteComment = async (commentId) => {
 
   try {
     debug('Deleting comment...');
-    const comment = await graphDb.query(query);
-    debug('...done');
-    return comment._results;
+    await graphDb.query(query);
+    return;
   }
   catch (error) {
     debug(error);
@@ -542,9 +549,10 @@ export const deleteComment = async (commentId) => {
 
 };
 
-export const getComments = async (postId, userId) => {
+export const getComments = async (postId, userId, page) => {
 
-  // TODO: order by like count?
+  const nPerPage = 15;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
 
   const query =
     `MATCH (u:User)-[:COMMENTED]->(c:Comment)-[:TO]->(p:Post {postId: '${postId}'})
@@ -552,7 +560,9 @@ export const getComments = async (postId, userId) => {
     OPTIONAL MATCH (:User {userId: '${userId}'})-[l2:LIKED]->(c)
     WITH u, c, p, count(l) AS likes, count(l2) AS isLiking
     RETURN collect([u, c, likes, isLiking]) AS comment
-    ORDER BY c.createdAt ASC`
+    ORDER BY c.createdAt ASC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}`
   ;
 
   debug('Getting comments...');
@@ -560,7 +570,6 @@ export const getComments = async (postId, userId) => {
   debug('...done');
 
   const results = graphRes._results;
-  debug(results);
 
   const comments = [];
 
@@ -576,6 +585,7 @@ export const getComments = async (postId, userId) => {
     const commentId = results[i]._values[0][0][1].properties.commentId;
     const comment = results[i]._values[0][0][1].properties.comment;
     const createdAt = results[i]._values[0][0][1].properties.createdAt;
+    const responseTo = results[i]._values[0][0][1].properties.responseTo;
     const likes = results[i]._values[0][0][2];
     const liking = results[i]._values[0][0][3];
 
@@ -592,7 +602,8 @@ export const getComments = async (postId, userId) => {
       comment,
       createdAt,
       likeCount: likes,
-      isLiking
+      isLiking,
+      responseTo
     };
 
     comments.push(commentObj);
@@ -612,6 +623,7 @@ export const getComments = async (postId, userId) => {
 export const createNotification = async (userId, to, type) => {
 
   // to = user id (follow) || post id (post, comment)
+  // type: follow || comment || like
 
   const notificationObj = {
     type: type,

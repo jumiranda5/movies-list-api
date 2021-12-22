@@ -16,6 +16,10 @@ const NotificationsSchema = new Schema({
     type: String, // user, post, comment
     required: true
   },
+  seen: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
