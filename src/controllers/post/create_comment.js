@@ -1,8 +1,8 @@
 const debug = require('debug')('app:comment');
-import { createComment, createNotification, findUserFcmToken } from './_queries_post';
+import { createComment } from './_queries_post';
 import { v4 as uuidv4 } from 'uuid';
 import { verifyAccessToken } from '../../helpers/token_helper';
-const admin = require("firebase-admin");
+import { send_notification } from '../notifications/create_notification';
 
 export const create_comment = async (req, res, next) => {
 
@@ -10,10 +10,23 @@ export const create_comment = async (req, res, next) => {
   const postId = req.params.postId;
   const postUserId = req.params.postUserId;
   const responseTo = req.params.responseTo; // post || username
+  const senderUsername = req.params.senderUsername;
+  const lang = req.params.lang;
   const commentText = req.body.comment;
   const commentId = uuidv4();
 
   debug(commentText);
+
+  let type;
+  let targetType;
+  if (responseTo === 'post') {
+    type = 'comment';
+    targetType = 'post';
+  }
+  else {
+    type = 'comment_response';
+    targetType = 'comment';
+  }
 
   try {
     const dec = await verifyAccessToken(accessToken);
@@ -22,36 +35,8 @@ export const create_comment = async (req, res, next) => {
     debug('Create comment on graph...');
     const comment = await createComment(userId, postId, commentText, commentId, responseTo);
 
-    if (userId !== postUserId) {
-
-      // create notification document
-      debug('Create notification document...');
-      await createNotification(userId, postId, "comment");
-
-      // send push notification
-      const user = await findUserFcmToken(postUserId);
-      debug(`===== User => ${user}`);
-
-      const notification_options = { priority: "normal" };
-
-      // message payload.
-      /*
-      const message = {
-        notification: {
-          body: `${user.username} commented on your post.`
-        },
-        data: {
-          body: `${user.username} commented on your post.`
-        },
-        topic: "app"
-      };
-
-      admin.messaging()
-        .sendToDevice(user.fcm_token, message, notification_options)
-        .then( () => { debug('Push notification sent'); });
-
-        */
-    }
+    debug('Create notification document and send push...');
+    await send_notification(type, postUserId, targetType, postUserId, userId, senderUsername, lang);
 
     return res.json(comment);
   }

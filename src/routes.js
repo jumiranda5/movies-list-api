@@ -53,7 +53,7 @@ import { delete_comment } from './controllers/post/delete_comment';
 import { top10 } from './controllers/top_10/top10_controller';
 
 // Test fcm
-import { send_notification } from './controllers/notification_controller';
+//import { send_notification } from './controllers/notification_controller';
 
 // Middlewares
 import { validateSignUp, validateSearchUser, validateSearch } from './middlewares/validation';
@@ -113,7 +113,7 @@ router.post('/api/comment/delete/:commentId', requireLogin, delete_comment);
 router.get('/api/top10/:type', requireLogin, top10);
 
 // fcm test route
-router.post('/api/fcm/:registrationToken', send_notification);
+//router.post('/api/fcm/:registrationToken', send_notification);
 
 
 module.exports = router;
