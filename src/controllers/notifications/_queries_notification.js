@@ -67,7 +67,7 @@ export const findUserFcmToken = async (targetUserId) => {
 
 export const getNewNotificationsCount = async (userId) => {
 
-  const newNotificationsCount = await Notification.countDocuments({target_user_id: userId});
+  const newNotificationsCount = await Notification.countDocuments({target_user_id: userId, seen: false});
   debug(`found ${newNotificationsCount} new notifications`);
 
   return newNotificationsCount;
