@@ -6,9 +6,9 @@ import { send_notification } from '../notifications/create_notification';
 export const like = async (req, res, next) => {
 
   const likeType = req.params.type; // post || comment (like type...)
-  const postId = req.params.postId; // post || comment id
+  const targetId = req.params.postId; // post || comment id
   const targetUserId = req.params.targetUserId;
-  const senderUsername = req.param.senderUsername;
+  const senderUsername = req.params.senderUsername;
   const lang = req.params.lang;
   const accessToken = req.headers['x-access-token'];
 
@@ -19,7 +19,7 @@ export const like = async (req, res, next) => {
 
     // create like in graph db
     debug('Create like on graph...');
-    await createLike(userId, postId, likeType);
+    await createLike(userId, targetId, likeType);
 
     debug('Create notification document and send push...');
     await send_notification("like", targetUserId, likeType, targetUserId, userId, senderUsername, lang);

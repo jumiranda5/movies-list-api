@@ -17,6 +17,8 @@ export const follow = async (req, res, next) => {
     // create follow relatioship on graph
     await createFollow(from, to);
 
+    debug(`FROM => ${from}`);
+
     // create notification
     debug('Create notification document and send push...');
     await send_notification('follow', to, 'user', to, from, senderUsername, lang);

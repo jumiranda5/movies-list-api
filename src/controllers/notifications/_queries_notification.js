@@ -32,17 +32,19 @@ export const createNotification = async (sender, target, type) => {
     debug(`Error code: ${error.code}`);
     debug(`Error message: ${error.message}`);
 
-    throw error;
+    //throw error;
   }
 
 };
 
 export const findUserFcmToken = async (targetUserId) => {
 
+  debug(targetUserId);
+
   try {
     const userObj = ['fcm_token', 'notifications_on'];
     debug('Find user notifications config...');
-    const user = await User.findById(targetUserId, userObj).exec();
+    const user = await User.findOne({_id: targetUserId}, userObj).exec();
 
     if (user !== null) {
       debug(user);
@@ -58,7 +60,7 @@ export const findUserFcmToken = async (targetUserId) => {
   }
   catch(error) {
     debug(error.message);
-    throw error;
+    return null;
   }
 
 };

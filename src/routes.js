@@ -82,7 +82,7 @@ router.post('/api/user/edit-user', [requireLogin, validateSearchUser], edit_user
 /* ------- FOLLOWS ------- */
 router.get('/api/followers/:userId/:page', requireLogin, followers);
 router.get('/api/following/:userId/:page', requireLogin, following);
-router.post('/api/follow/:to', requireLogin, follow);
+router.post('/api/follow/:to/:senderUsername/:lang', requireLogin, follow);
 router.post('/api/unfollow/:to', requireLogin, unfollow);
 
 /* -------- WATCHLIST -------- */
@@ -103,7 +103,7 @@ router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
 router.get('/api/post/:postId', requireLogin, post);
 router.post('/api/post/add/:type', requireLogin, add_post);
 router.post('/api/post/delete/:postId', requireLogin, delete_post);
-router.post('/api/like/create/:postId/:type/:targetUserId', like);
+router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername', requireLogin, like);
 router.post('/api/like/delete/:postId/:type', delete_like);
 router.get('/api/comment/all/:postId/:page', requireLogin, comments);
 router.post('/api/comment/create/:postId/:postUserId/:responseTo', requireLogin, create_comment);

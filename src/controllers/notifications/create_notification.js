@@ -7,6 +7,13 @@ export const send_notification = async (type, targetUserId, targetType, targetId
   // type = follow || like || comment || comment_response
   // targetType = user || post || comment
 
+  debug(`type : ${type}`);
+  debug(`targetUserId : ${targetUserId}`);
+  debug(`targetType : ${targetType}`);
+  debug(`targetId : ${targetId}`);
+  debug(`senderId : ${senderId}`);
+  debug(`senderUsername : ${senderUsername}`);
+
   // get fcm token from server (+ get notifications_on and username from target user document)
   const targetUser = await findUserFcmToken(targetUserId);
   debug(`===== User => ${targetUser}`);
@@ -33,7 +40,7 @@ export const send_notification = async (type, targetUserId, targetType, targetId
   }
 
   // fcm
-  if (isNotificationsOn && targetUserId !== senderId) {
+  if (isNotificationsOn && targetUserId !== senderId && targetUser !== null) {
 
     const notification_options = {
       priority: "normal"
