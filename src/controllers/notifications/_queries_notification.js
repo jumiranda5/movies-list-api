@@ -73,3 +73,32 @@ export const getNewNotificationsCount = async (userId) => {
   return newNotificationsCount;
 
 };
+
+export const getNotifications = async (userId, page) => {
+
+  const nPerPage = 20;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
+
+  const notifications = Notification.find(
+    {target_user_id: userId},
+    ['type', 'sender_username', 'sender_id', 'target_type', 'target_id', 'seen'])
+    .sort({createdAt: -1})
+    .limit(nPerPage)
+    .skip(nSkip)
+    .exec();
+
+  return notifications;
+
+};
+
+export const updateSeenNotifications = async (userId) => {
+
+  const query = { target_user_id: userId, seen: false};
+  const options = { new: false };
+  const update = { $set: { seen: true }};
+
+  const notifications = Notification.updateMany(query, update, options);
+
+  return notifications;
+
+};

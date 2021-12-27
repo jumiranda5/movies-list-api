@@ -54,6 +54,7 @@ import { top10 } from './controllers/top_10/top10_controller';
 
 // Notifications
 import { new_notifications_count } from './controllers/notifications/get_new_notifications_count';
+import { get_notifications } from './controllers/notifications/get_notifications';
 
 // Test fcm
 //import { send_notification } from './controllers/notification_controller';
@@ -107,7 +108,7 @@ router.get('/api/post/:postId', requireLogin, post);
 router.post('/api/post/add/:type', requireLogin, add_post);
 router.post('/api/post/delete/:postId', requireLogin, delete_post);
 router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername', requireLogin, like);
-router.post('/api/like/delete/:postId/:type', delete_like);
+router.post('/api/like/delete/:postId/:type', requireLogin, delete_like);
 router.get('/api/comment/all/:postId/:page', requireLogin, comments);
 router.post('/api/comment/create/:postId/:postUserId/:responseTo/:senderUsername', requireLogin, create_comment);
 router.post('/api/comment/delete/:commentId', requireLogin, delete_comment);
@@ -118,6 +119,7 @@ router.get('/api/top10/:type', requireLogin, top10);
 
 /* -------- Notifications -------- */
 router.get('/api/notifications/count/:userId', new_notifications_count);
+router.get('/api/notifications/:userId/:page', get_notifications);
 
 // fcm test route
 //router.post('/api/fcm/:registrationToken', send_notification);
