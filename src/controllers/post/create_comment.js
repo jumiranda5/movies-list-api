@@ -36,7 +36,7 @@ export const create_comment = async (req, res, next) => {
     const comment = await createComment(userId, postId, commentText, commentId, responseTo);
 
     debug('Create notification document and send push...');
-    await send_notification(type, postUserId, targetType, postUserId, userId, senderUsername, lang);
+    await send_notification(type, postUserId, targetType, postId, userId, senderUsername, lang);
 
     return res.json(comment);
   }

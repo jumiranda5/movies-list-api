@@ -7,7 +7,7 @@ export const get_notifications = async (req, res, next) => {
 
   // get and update notifications documents
   const notifications = await getNotifications(userId, page);
-  // await updateSeenNotifications(userId);
+  await updateSeenNotifications(userId);
 
   return res.json({notifications: notifications});
 

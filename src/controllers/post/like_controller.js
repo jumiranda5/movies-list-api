@@ -22,7 +22,7 @@ export const like = async (req, res, next) => {
     await createLike(userId, targetId, likeType);
 
     debug('Create notification document and send push...');
-    await send_notification("like", targetUserId, likeType, targetUserId, userId, senderUsername, lang);
+    await send_notification("like", targetUserId, likeType, targetId, userId, senderUsername, lang);
 
     return res.json({message: 'Success'});
 
