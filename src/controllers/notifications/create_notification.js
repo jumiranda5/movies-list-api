@@ -18,7 +18,7 @@ export const send_notification = async (type, targetUserId, targetType, targetId
   const targetUser = await findUserFcmToken(targetUserId);
   debug(`===== User => ${targetUser}`);
 
-  const fcmToken = targetUser.fcm_token;
+  const fcmToken = targetUser.fcm_token; // handle empty fcm token...
 
   const isNotificationsOn = targetUser.notifications_on;
 
@@ -68,9 +68,13 @@ export const send_notification = async (type, targetUserId, targetType, targetId
     if (lang === "pt-BR" || lang === "pt-PT") message = messagePt;
     else message = messageEn;
 
-    admin.messaging().sendToDevice(fcmToken, message, notification_options)
+    if (fcmToken !== null || fcmToken !== "") { // not working... ???
+
+      admin.messaging().sendToDevice(fcmToken, message, notification_options)
       .then( () => { debug("Notification sent successfully");})
       .catch( error => { debug(error); });
+
+    }
 
   }
 

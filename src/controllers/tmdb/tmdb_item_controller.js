@@ -95,8 +95,10 @@ export const tmdb_item = async (req, res, next) => {
 
     // Check if results are bookmarked
     let isBookmarked = false;
-    if (type === 'movie' && watchlist.movies.find(doc => doc._id === itemId)) isBookmarked = true;
-    if (type === 'tv' && watchlist.series.find(doc => doc._id === itemId)) isBookmarked = true;
+    if (watchlist !== null) {
+      if (type === 'movie' && watchlist.movies.find(doc => doc._id === itemId)) isBookmarked = true;
+      if (type === 'tv' && watchlist.series.find(doc => doc._id === itemId)) isBookmarked = true;
+    }
     debug(`Is bookmarked: ${isBookmarked}`);
 
     // Reactions - following
