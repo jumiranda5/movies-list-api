@@ -170,7 +170,9 @@ export const getUserPosts = async (userId) => {
 
   const postProperties = ['post_type', 'media_type', 'reaction', 'title'];
 
-  const posts = await Post.find({userId: userId}, postProperties).exec();
+  const posts = await Post.find({userId: userId}, postProperties)
+                          .sort({createdAt: -1})
+                          .exec();
 
   const postsList = [];
 

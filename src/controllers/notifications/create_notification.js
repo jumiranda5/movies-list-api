@@ -68,7 +68,7 @@ export const send_notification = async (type, targetUserId, targetType, targetId
     if (lang === "pt-BR" || lang === "pt-PT") message = messagePt;
     else message = messageEn;
 
-    if (fcmToken !== null || fcmToken !== "") { // not working... ???
+    if (fcmToken.length !== 0) { // (fcmToken !== '' || fcmToken !== null) didn't work
 
       admin.messaging().sendToDevice(fcmToken, message, notification_options)
       .then( () => { debug("Notification sent successfully");})
