@@ -8,7 +8,7 @@ export const create_comment = async (req, res, next) => {
 
   const accessToken = req.headers['x-access-token'];
   const postId = req.params.postId;
-  const postUserId = req.params.postUserId;
+  const targetUserId = req.params.targetUserId;
   const responseTo = req.params.responseTo; // post || username
   const senderUsername = req.params.senderUsername;
   const lang = req.params.lang;
@@ -36,7 +36,7 @@ export const create_comment = async (req, res, next) => {
     const comment = await createComment(userId, postId, commentText, commentId, responseTo);
 
     debug('Create notification document and send push...');
-    await send_notification(type, postUserId, targetType, postId, userId, senderUsername, lang);
+    await send_notification(type, targetUserId, targetType, postId, userId, senderUsername, lang);
 
     return res.json(comment);
   }

@@ -114,7 +114,7 @@ router.post('/api/like/delete/:postId/:type', requireLogin, delete_like);
 
 /* -------- COMMENTS -------- */
 router.get('/api/comment/all/:postId/:page', requireLogin, comments);
-router.post('/api/comment/create/:postId/:postUserId/:responseTo/:senderUsername/:lang', requireLogin, create_comment);
+router.post('/api/comment/create/:postId/:targetUserId/:responseTo/:senderUsername/:lang', requireLogin, create_comment);
 router.post('/api/comment/delete/:commentId', requireLogin, delete_comment);
 
 /* -------- Top 10 -------- */
