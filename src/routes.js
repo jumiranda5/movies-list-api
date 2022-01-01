@@ -103,14 +103,18 @@ router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', requireLogin, rea
 
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', requireLogin, feed);
-router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
 router.get('/api/post/:postId', requireLogin, post);
 router.post('/api/post/add/:type', requireLogin, add_post);
 router.post('/api/post/delete/:postId', requireLogin, delete_post);
+
+/* -------- LIKES -------- */
+router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
 router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername/:lang', requireLogin, like);
 router.post('/api/like/delete/:postId/:type', requireLogin, delete_like);
+
+/* -------- COMMENTS -------- */
 router.get('/api/comment/all/:postId/:page', requireLogin, comments);
-router.post('/api/comment/create/:postId/:postUserId/:responseTo/:senderUsername', requireLogin, create_comment);
+router.post('/api/comment/create/:postId/:postUserId/:responseTo/:senderUsername/:lang', requireLogin, create_comment);
 router.post('/api/comment/delete/:commentId', requireLogin, delete_comment);
 
 /* -------- Top 10 -------- */

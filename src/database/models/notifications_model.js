@@ -34,10 +34,25 @@ const NotificationsSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
-    index: { expires: 365 * 24 * 60 * 60 * 1000 } // 1 year
+    default: Date.now()
   }
 });
 
 const Notification = mongoose.model('Notification', NotificationsSchema);
 export default Notification;
+
+// ttl (on createdAt) : index: { expireAfterSeconds: 365 * 24 * 60 * 60 * 1000 } // 1 year
+
+/*
+
+Remove notifications after a year:
+
+You can give any Date with Javascript date
+
+db.user_track.remove( { access_time : {"$lt" : new Date(year, month_0_indexed, day)} })
+So for removing documents before 1 September 2013 your command should be
+
+db.user_track.remove( { access_time : {"$lt" : new Date(2013, 8, 1) } })
+September is the 9th month but the month field is zero indexed. So we make that as 8.
+
+*/

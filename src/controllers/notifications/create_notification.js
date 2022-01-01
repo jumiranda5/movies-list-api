@@ -16,10 +16,7 @@ export const send_notification = async (type, targetUserId, targetType, targetId
 
   // get fcm token from server (+ get notifications_on and username from target user document)
   const targetUser = await findUserFcmToken(targetUserId);
-  debug(`===== User => ${targetUser}`);
-
-  const fcmToken = targetUser.fcm_token; // handle empty fcm token...
-
+  const fcmToken = targetUser.fcm_token;
   const isNotificationsOn = targetUser.notifications_on;
 
   const target = {
@@ -69,6 +66,8 @@ export const send_notification = async (type, targetUserId, targetType, targetId
     else message = messageEn;
 
     if (fcmToken.length !== 0) { // (fcmToken !== '' || fcmToken !== null) didn't work
+
+      debug('Sending push notification...');
 
       admin.messaging().sendToDevice(fcmToken, message, notification_options)
       .then( () => { debug("Notification sent successfully");})

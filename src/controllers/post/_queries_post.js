@@ -199,7 +199,8 @@ export const deletePostNode = async (postId) => {
   const query =
    `MATCH (p:Post)
     WHERE p.postId = '${postId}'
-    DETACH DELETE p`
+    OPTIONAL MATCH (c:Comment)-[:TO]->(p)
+    DETACH DELETE c, p`
   ;
 
   try {

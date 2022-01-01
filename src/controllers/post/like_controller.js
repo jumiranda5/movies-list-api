@@ -6,7 +6,7 @@ import { send_notification } from '../notifications/create_notification';
 export const like = async (req, res, next) => {
 
   const likeType = req.params.type; // post || comment (like type...)
-  const targetId = req.params.postId; // post || comment id
+  const targetId = req.params.targetId; // post || comment id
   const targetUserId = req.params.targetUserId;
   const senderUsername = req.params.senderUsername;
   const lang = req.params.lang;
