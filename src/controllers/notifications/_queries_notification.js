@@ -20,7 +20,8 @@ export const createNotification = async (sender, target, type) => {
     target_id: target.target_id,
     target_type: target.target_type,
     sender_id: sender.sender_id,
-    sender_username: sender.sender_username
+    sender_username: sender.sender_username,
+    createdAt: Date.now() // default Date.now() not working properly on Model
   };
 
   try {

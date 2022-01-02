@@ -131,7 +131,7 @@ export const deleteUserDocument = async (userId) => {
 export const deleteNotifications = async (userId) => {
 
   debug('Deleting notifications document...');
-  const del = await Notification.deleteMany({from: userId});
+  const del = await Notification.deleteMany({$or: [{sender_id: userId}, {target_user_id: userId}]});
 
   const count = del.deletedCount;
 

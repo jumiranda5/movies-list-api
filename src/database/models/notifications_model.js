@@ -33,7 +33,7 @@ const NotificationsSchema = new Schema({
     default: false
   },
   createdAt: {
-    type: Date,
+    type: Number,
     default: Date.now()
   }
 });

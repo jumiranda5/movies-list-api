@@ -109,7 +109,7 @@ router.post('/api/post/delete/:postId', requireLogin, delete_post);
 
 /* -------- LIKES -------- */
 router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
-router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername/:lang', requireLogin, like);
+router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername/:postId/:lang', requireLogin, like);
 router.post('/api/like/delete/:postId/:type', requireLogin, delete_like);
 
 /* -------- COMMENTS -------- */
@@ -122,8 +122,8 @@ router.get('/api/top10/:type', requireLogin, top10);
 
 
 /* -------- Notifications -------- */
-router.get('/api/notifications/count/:userId', new_notifications_count);
-router.get('/api/notifications/:userId/:page', get_notifications);
+router.get('/api/notifications/count/:userId', requireLogin, new_notifications_count);
+router.get('/api/notifications/:userId/:page', requireLogin, get_notifications);
 
 // fcm test route
 //router.post('/api/fcm/:registrationToken', send_notification);
