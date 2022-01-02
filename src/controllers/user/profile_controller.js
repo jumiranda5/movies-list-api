@@ -11,7 +11,6 @@ export const profile = async (req, res, next) => {
   let isOwnProfile;
 
   // Get user (avatar, id, name, username), followers count,  following count, posts count from graph
-  // Get posts from mongo (post type, media type, title[avatar, id, title], reaction)
 
   try {
     const dec = await verifyAccessToken(accessToken);
@@ -25,8 +24,8 @@ export const profile = async (req, res, next) => {
     debug(`isOwnProfile = ${isOwnProfile}`);
     debug(profile);
 
-    const posts = await getUserPosts(userId);
-    debug(posts);
+//    const posts = await getUserPosts(userId);
+//    debug(posts);
 
     return res.json({
       message: 'Success',
@@ -35,8 +34,7 @@ export const profile = async (req, res, next) => {
       followingCount: profile.followingCount,
       postsCount: profile.postsCount,
       isOwnProfile,
-      isFollowing: profile.isFollowing,
-      posts
+      isFollowing: profile.isFollowing
     });
 
   }

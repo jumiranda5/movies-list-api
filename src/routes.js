@@ -79,7 +79,7 @@ router.post('/api/save-fcm-token', save_fcm_token);
 
 /* ------- USER ------- */
 router.get('/api/user/profile/:userId', requireLogin, profile);
-router.get('/api/user/profile/:userId/:tab', requireLogin, profile_posts);
+router.get('/api/user/profile/:userId/:tab/:page', requireLogin, profile_posts);
 router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
 router.post('/api/user/edit-user', [requireLogin, validateSearchUser], edit_user);
 

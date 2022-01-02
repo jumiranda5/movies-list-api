@@ -97,7 +97,7 @@ export const getUserProfile = async (userId, visitorId) => {
   const graphRes = await graphDb.query(query);
   const results = graphRes._results;
 
-  debug(graphRes);
+  //debug(graphRes);
 
   const userRes = results[0]._values[0].properties;
   const followersCount = results[0]._values[1];
@@ -166,12 +166,22 @@ export const updateUserNode = async (userData) => {
 
 // Get posts from mongo (post type, media type, title[avatar, id, title], reaction)
 
-export const getUserPosts = async (userId) => {
+export const getUserPosts = async (userId, tab, page) => {
 
-  const postProperties = ['post_type', 'media_type', 'reaction', 'title'];
+  const nPerPage = 20;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
 
-  const posts = await Post.find({userId: userId}, postProperties)
+  let query
+  if (tab === "multi") query = {userId: userId};
+  else if (tab === "tv") query = {"$and": [{userId: userId}, {media_type: 'tv'}]};
+  else query = {"$and": [{userId: userId}, {media_type: 'movie'}]};
+
+  const postProperties = ['post_type', 'media_type', 'reaction', 'title', 'createdAt'];
+
+  const posts = await Post.find(query, postProperties)
                           .sort({createdAt: -1})
+                          .limit(nPerPage)
+                          .skip(nSkip)
                           .exec();
 
   const postsList = [];
@@ -185,6 +195,8 @@ export const getUserPosts = async (userId) => {
       title: posts[i].title || null
     };
     postsList.push(post);
+
+    //debug(`Media type: ${posts[i].media_type}`)
   }
 
   return postsList;
