@@ -11,10 +11,6 @@ export const access = async (req, res) => {
    * else => user not logged in
    */
 
-  const apiKey = req.headers['x-app-key'];
-  debug(apiKey);
-  debug(uuidv4());
-
   if (req.headers['x-access-token']) {
 
     debug('Session header found. Verify token...');

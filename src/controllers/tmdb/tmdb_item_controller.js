@@ -37,7 +37,6 @@ export const tmdb_item = async (req, res, next) => {
     const accessToken = req.headers['x-access-token'];
     const dec = await verifyAccessToken(accessToken);
     const userId = dec.userId;
-    //const userId = '616b003821f6b937d9e4473e';
 
     debug('get data');
     const itemData = await Promise.all([

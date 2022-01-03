@@ -1,6 +1,26 @@
 import tmdb from '../config_tmdb';
 const debug = require('debug')('app:tmdb_helper');
 
+/* ======= REPLACE LATIN CHARACTERS ======== */
+
+export const replaceCharacters = (string) => {
+
+  let newString;
+
+  newString = string.replace(/ç/gu, "c");
+  newString = string.replace(/[àáâãäå]/gu, "a")
+  newString = string.replace(/[èéêë]/gu, "e");
+  newString = string.replace(/[ìíîï]/gu, "i");
+  newString = string.replace(/[òóôõö]/gu, "o");
+  newString = string.replace(/[ùúûü]/gu, "u");
+  newString = string.replace(/ñ/gu, "n");
+  newString = string.replace(/œ/gu, "oe");
+  newString = string.replace(/æ/gu, "ae");
+
+  return newString;
+
+};
+
 /* ========== SEARCH ITEM OBJECT ========== */
 
 export const searchResults = (responseData, lang, savedMovies, savedSeries, type) => {

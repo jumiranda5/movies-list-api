@@ -2,7 +2,7 @@ import { get } from '../../config_axios';
 import axios from 'axios';
 import config from '../../config';
 import tmdb from '../../config_tmdb';
-import { searchResults } from '../../helpers/tmdb_helper';
+import { searchResults, replaceCharacters } from '../../helpers/tmdb_helper';
 import { findWatchlist } from '../watchlist/_queries_watchlist';
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { isInputDataValid } from '../../middlewares/validation';
@@ -24,8 +24,8 @@ export const search_tmdb_multi = async (req, res, next) => {
     return res.send({ message: err.message });
   }
 
-  // replace 'Ç' => not working on tmdb query
-  const query = queryParam.replace(/ç/gu, "c");
+  // replace 'Ç' and other latin characters=> not working on tmdb query
+  const query = replaceCharacters(queryParam);
 
   const searchRoute = `${tmdb.base_url}/search/multi`;
   const key = `api_key=${api_key}`;
