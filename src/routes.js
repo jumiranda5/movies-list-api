@@ -55,6 +55,7 @@ import { top10 } from './controllers/top_10/top10_controller';
 // Notifications
 import { new_notifications_count } from './controllers/notifications/get_new_notifications_count';
 import { get_notifications } from './controllers/notifications/get_notifications';
+import { edit_notifications_prefs } from './controllers/notifications/edit_notifications_prefs';
 
 // Test fcm
 //import { send_notification } from './controllers/notification_controller';
@@ -122,6 +123,7 @@ router.get('/api/top10/:type', requireLogin, top10);
 
 
 /* -------- Notifications -------- */
+router.post('/api/notifications/prefs/:value', requireLogin, edit_notifications_prefs);
 router.get('/api/notifications/count/:userId', requireLogin, new_notifications_count);
 router.get('/api/notifications/:userId/:page', requireLogin, get_notifications);
 

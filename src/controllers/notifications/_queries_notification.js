@@ -103,3 +103,31 @@ export const updateSeenNotifications = async (userId) => {
   return notifications;
 
 };
+
+export const updateNotificationsPrefs = async (userId, value) => {
+
+  let prefs;
+  if (value === "true") prefs = true;
+  else prefs = false;
+
+  const query = { _id: userId};
+  const options = { new: false };
+  const update = { $set: { notifications_on: prefs }};
+
+  try {
+    debug(`Updating user...`);
+    await User.findOneAndUpdate(query, update, options).exec();
+
+    return true;
+  }
+  catch (error) {
+    if (error.code === 11000) {
+      const err = new Error(`Username must be unique`);
+      err.status = 409 ;
+      //debug(err.message);
+      throw err;
+    }
+    else throw error;
+  }
+
+};
