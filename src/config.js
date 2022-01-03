@@ -17,6 +17,7 @@ const config = {
 
   PORT,
   ENV,
+  API_KEY: process.env.API_KEY,
   DB : {
     mongo_uri: process.env.MONGODB_URI,
     db_user: process.env.DB_USER,

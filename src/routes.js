@@ -1,6 +1,9 @@
 import express from 'express';
 const router = express.Router();
 
+// dev message
+import { send_message_to_dev } from './controllers/dev_message';
+
 // router callback functions:
 import { home } from './controllers/home_controller';
 import { terms } from './controllers/terms_controller';
@@ -63,7 +66,9 @@ import { edit_notifications_prefs } from './controllers/notifications/edit_notif
 // Middlewares
 import { validateSignUp, validateSearchUser, validateSearch, validateEditUser } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
+import { requireApiKey } from './middlewares/requireApiKey';
 
+router.post('/api/dev-message', send_message_to_dev);
 
 /* ------- HOME ------- */
 router.get('/', home);
@@ -71,64 +76,61 @@ router.get('/terms-of-use', terms);
 router.get('/privacy-policy', privacy);
 
 /* ------- AUTH ------- */
-router.get('/api', access);
-router.post('/api/login', login);
-router.post('/api/signup', validateSignUp, signup);
-router.post('/api/logout', requireLogin, logout);
-router.post('/api/delete-account', requireLogin, delete_account);
-router.post('/api/save-fcm-token', save_fcm_token);
+router.get('/api', requireApiKey, access);
+router.post('/api/login', requireApiKey, login);
+router.post('/api/signup', [validateSignUp, requireApiKey], signup);
+router.post('/api/logout', [requireLogin, requireApiKey], logout);
+router.post('/api/delete-account', [requireLogin, requireApiKey], delete_account);
+router.post('/api/save-fcm-token', requireApiKey, save_fcm_token);
 
 /* ------- USER ------- */
-router.get('/api/user/profile/:userId', requireLogin, profile);
-router.get('/api/user/profile/:userId/:tab/:page', requireLogin, profile_posts);
-router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
-router.post('/api/user/edit-user', [requireLogin, validateEditUser], edit_user);
+router.get('/api/user/profile/:userId', [requireLogin, requireApiKey], profile);
+router.get('/api/user/profile/:userId/:tab/:page', [requireLogin, requireApiKey], profile_posts);
+router.post('/api/user/search/:page/:search', [requireLogin, requireApiKey, validateSearchUser], search_user);
+router.post('/api/user/edit-user', [requireLogin, requireApiKey, validateEditUser], edit_user);
 
 /* ------- FOLLOWS ------- */
-router.get('/api/followers/:userId/:page', requireLogin, followers);
-router.get('/api/following/:userId/:page', requireLogin, following);
-router.post('/api/follow/:to/:senderUsername/:lang', requireLogin, follow);
-router.post('/api/unfollow/:to', requireLogin, unfollow);
+router.get('/api/followers/:userId/:page', [requireLogin, requireApiKey], followers);
+router.get('/api/following/:userId/:page', [requireLogin, requireApiKey], following);
+router.post('/api/follow/:to/:senderUsername/:lang', [requireLogin, requireApiKey], follow);
+router.post('/api/unfollow/:to', [requireLogin, requireApiKey], unfollow);
 
 /* -------- WATCHLIST -------- */
-router.get('/api/watchlist', requireLogin, watchlist);
-router.post('/api/watchlist/add', requireLogin, add_watchlist_item);
-router.post('/api/watchlist/delete/:type/:id', requireLogin, delete_watchlist_item);
+router.get('/api/watchlist', [requireLogin, requireApiKey], watchlist);
+router.post('/api/watchlist/add', [requireLogin, requireApiKey], add_watchlist_item);
+router.post('/api/watchlist/delete/:type/:id', [requireLogin, requireApiKey], delete_watchlist_item);
 
 /* -------- TMDB -------- */
-router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_multi);
-router.get('/api/tmdb/search/tv/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_tv);
-router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, validateSearch], search_tmdb_movie);
-router.get('/api/tmdb/item/:type/:itemId/:lang', requireLogin, tmdb_item);
-router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', requireLogin, reactions_users);
+router.get('/api/tmdb/search/multi/:query/:page/:lang', [requireLogin, requireApiKey, validateSearch], search_tmdb_multi);
+router.get('/api/tmdb/search/tv/:query/:page/:lang', [requireLogin, requireApiKey, validateSearch], search_tmdb_tv);
+router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, requireApiKey, validateSearch], search_tmdb_movie);
+router.get('/api/tmdb/item/:type/:itemId/:lang', [requireLogin, requireApiKey], tmdb_item);
+router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', [requireLogin, requireApiKey], reactions_users);
 
 /* -------- POSTS -------- */
-router.get('/api/post/feed/:page', requireLogin, feed);
-router.get('/api/post/:postId', requireLogin, post);
-router.post('/api/post/add/:type', requireLogin, add_post);
-router.post('/api/post/delete/:postId', requireLogin, delete_post);
+router.get('/api/post/feed/:page', [requireLogin, requireApiKey], feed);
+router.get('/api/post/:postId', [requireLogin, requireApiKey], post);
+router.post('/api/post/add/:type', [requireLogin, requireApiKey], add_post);
+router.post('/api/post/delete/:postId', [requireLogin, requireApiKey], delete_post);
 
 /* -------- LIKES -------- */
-router.get('/api/post/likes/:id/:page/:type', requireLogin, get_likes);
-router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername/:postId/:lang', requireLogin, like);
-router.post('/api/like/delete/:postId/:type', requireLogin, delete_like);
+router.get('/api/post/likes/:id/:page/:type', [requireLogin, requireApiKey], get_likes);
+router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername/:postId/:lang', [requireLogin, requireApiKey], like);
+router.post('/api/like/delete/:postId/:type', [requireLogin, requireApiKey], delete_like);
 
 /* -------- COMMENTS -------- */
-router.get('/api/comment/all/:postId/:page', requireLogin, comments);
-router.post('/api/comment/create/:postId/:targetUserId/:responseTo/:senderUsername/:lang', requireLogin, create_comment);
-router.post('/api/comment/delete/:commentId', requireLogin, delete_comment);
+router.get('/api/comment/all/:postId/:page', [requireLogin, requireApiKey], comments);
+router.post('/api/comment/create/:postId/:targetUserId/:responseTo/:senderUsername/:lang', [requireLogin, requireApiKey], create_comment);
+router.post('/api/comment/delete/:commentId', [requireLogin, requireApiKey], delete_comment);
 
 /* -------- Top 10 -------- */
-router.get('/api/top10/:type', requireLogin, top10);
+router.get('/api/top10/:type', [requireLogin, requireApiKey], top10);
 
 
 /* -------- Notifications -------- */
-router.post('/api/notifications/prefs/:value', requireLogin, edit_notifications_prefs);
-router.get('/api/notifications/count/:userId', requireLogin, new_notifications_count);
-router.get('/api/notifications/:userId/:page', requireLogin, get_notifications);
-
-// fcm test route
-//router.post('/api/fcm/:registrationToken', send_notification);
+router.post('/api/notifications/prefs/:value', [requireLogin, requireApiKey], edit_notifications_prefs);
+router.get('/api/notifications/count/:userId', [requireLogin, requireApiKey], new_notifications_count);
+router.get('/api/notifications/:userId/:page', [requireLogin, requireApiKey], get_notifications);
 
 
 module.exports = router;
