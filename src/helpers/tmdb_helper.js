@@ -7,15 +7,15 @@ export const replaceCharacters = (string) => {
 
   let newString;
 
-  newString = string.replace(/ç/gu, "c");
-  newString = string.replace(/[àáâãäå]/gu, "a")
-  newString = string.replace(/[èéêë]/gu, "e");
-  newString = string.replace(/[ìíîï]/gu, "i");
-  newString = string.replace(/[òóôõö]/gu, "o");
-  newString = string.replace(/[ùúûü]/gu, "u");
-  newString = string.replace(/ñ/gu, "n");
-  newString = string.replace(/œ/gu, "oe");
-  newString = string.replace(/æ/gu, "ae");
+  newString = string.replace(/ç/gu, "c")
+                    .replace(/[àáâãäå]/gu, "a")
+                    .replace(/[èéêë]/gu, "e")
+                    .replace(/[ìíîï]/gu, "i")
+                    .replace(/[òóôõö]/gu, "o")
+                    .replace(/[ùúûü]/gu, "u")
+                    .replace(/ñ/gu, "n")
+                    .replace(/œ/gu, "oe")
+                    .replace(/æ/gu, "ae")
 
   return newString;
 
