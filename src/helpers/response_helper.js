@@ -1,4 +1,4 @@
-const debug = require('debug')('app:helper');
+//const debug = require('debug')('app:helper');
 
 export const graphUserObject = (user) => {
   return {

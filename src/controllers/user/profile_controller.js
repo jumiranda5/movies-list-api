@@ -1,5 +1,5 @@
 import { verifyAccessToken } from '../../helpers/token_helper';
-import { getUserProfile, getUserPosts } from './_queries_user';
+import { getUserProfile } from './_queries_user';
 const debug = require('debug')('app:profile');
 
 export const profile = async (req, res, next) => {

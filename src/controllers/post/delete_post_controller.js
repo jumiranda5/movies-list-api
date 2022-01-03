@@ -1,4 +1,4 @@
-const debug = require('debug')('app:delete-post');
+//const debug = require('debug')('app:delete-post');
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { deletePostDocument, deletePostNode } from './_queries_post';
 

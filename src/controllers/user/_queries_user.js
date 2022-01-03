@@ -171,7 +171,7 @@ export const getUserPosts = async (userId, tab, page) => {
   const nPerPage = 20;
   const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
 
-  let query
+  let query;
   if (tab === "multi") query = {userId: userId};
   else if (tab === "tv") query = {"$and": [{userId: userId}, {media_type: 'tv'}]};
   else query = {"$and": [{userId: userId}, {media_type: 'movie'}]};

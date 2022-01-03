@@ -1,5 +1,5 @@
 import tmdb from '../config_tmdb';
-const debug = require('debug')('app:tmdb_helper');
+//const debug = require('debug')('app:tmdb_helper');
 
 /* ======= REPLACE LATIN CHARACTERS ======== */
 
@@ -7,17 +7,15 @@ export const replaceCharacters = (string) => {
 
   const s = string.toLowerCase();
 
-  let newString;
-
-  newString = s.replace(/ç/gu, "c")
-                .replace(/[àáâãäå]/gu, "a")
-                .replace(/[èéêë]/gu, "e")
-                .replace(/[ìíîï]/gu, "i")
-                .replace(/[òóôõö]/gu, "o")
-                .replace(/[ùúûü]/gu, "u")
-                .replace(/ñ/gu, "n")
-                .replace(/œ/gu, "oe")
-                .replace(/æ/gu, "ae")
+  const newString = s.replace(/ç/gu, "c")
+                     .replace(/[àáâãäå]/gu, "a")
+                     .replace(/[èéêë]/gu, "e")
+                     .replace(/[ìíîï]/gu, "i")
+                     .replace(/[òóôõö]/gu, "o")
+                     .replace(/[ùúûü]/gu, "u")
+                     .replace(/ñ/gu, "n")
+                     .replace(/œ/gu, "oe")
+                     .replace(/æ/gu, "ae");
 
   return newString;
 
@@ -118,7 +116,7 @@ export const getMediaObject = (data, lang, type) => {
 
   const site_url = tmdb.site_url;
   const image_base_url = tmdb.images.secure_base_url;
-  const logo_size = tmdb.images.logo_sizes[1];
+  //const logo_size = tmdb.images.logo_sizes[1];
   const poster_size = tmdb.images.poster_sizes[4];
 
   // GENRES

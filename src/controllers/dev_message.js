@@ -12,7 +12,7 @@ export const send_message_to_dev = async (req, res, next) => {
     username,
     userId,
     message
-  }
+  };
 
   try {
 

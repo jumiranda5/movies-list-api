@@ -17,4 +17,4 @@ export const delete_comment = async (req, res, next) => {
     return next(error);
   }
 
-}
+};

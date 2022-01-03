@@ -27,4 +27,4 @@ export const delete_like = async (req, res, next) => {
     return next(error);
   }
 
-}
+};

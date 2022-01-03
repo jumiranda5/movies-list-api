@@ -38,4 +38,4 @@ export const deleteTop10 = async (userId) => {
 
   return count;
 
-}
+};

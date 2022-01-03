@@ -2,8 +2,6 @@ import { verifyAccessToken } from "../../helpers/token_helper";
 import { findUserSid } from './_queries_auth';
 const debug = require('debug')('app:access');
 
-import { v4 as uuidv4 } from 'uuid';
-
 export const access = async (req, res) => {
 
   /**
