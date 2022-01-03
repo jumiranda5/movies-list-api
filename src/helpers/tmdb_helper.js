@@ -5,17 +5,19 @@ const debug = require('debug')('app:tmdb_helper');
 
 export const replaceCharacters = (string) => {
 
+  const s = string.toLowerCase();
+
   let newString;
 
-  newString = string.replace(/ç/gu, "c")
-                    .replace(/[àáâãäå]/gu, "a")
-                    .replace(/[èéêë]/gu, "e")
-                    .replace(/[ìíîï]/gu, "i")
-                    .replace(/[òóôõö]/gu, "o")
-                    .replace(/[ùúûü]/gu, "u")
-                    .replace(/ñ/gu, "n")
-                    .replace(/œ/gu, "oe")
-                    .replace(/æ/gu, "ae")
+  newString = s.replace(/ç/gu, "c")
+                .replace(/[àáâãäå]/gu, "a")
+                .replace(/[èéêë]/gu, "e")
+                .replace(/[ìíîï]/gu, "i")
+                .replace(/[òóôõö]/gu, "o")
+                .replace(/[ùúûü]/gu, "u")
+                .replace(/ñ/gu, "n")
+                .replace(/œ/gu, "oe")
+                .replace(/æ/gu, "ae")
 
   return newString;
 
