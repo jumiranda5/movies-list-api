@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Views
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../public/views'));
 app.set('view engine', 'pug');
 
 // include routes
@@ -84,6 +84,7 @@ const gracefulExit = async () => {
     server.close(() => {
       debug('Closed server.');
       process.exitCode = 1;
+      process.exit();
     });
   });
 };
@@ -98,7 +99,8 @@ process.on('SITERM', () => {
   gracefulExit();
 });
 
-process.on('exit', () => {
-  debug('Node exit.');
-});
+//process.on('exit', () => {
+//  debug('Node exit.');
+//  process.exit
+//});
 
