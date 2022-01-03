@@ -60,7 +60,7 @@ import { get_notifications } from './controllers/notifications/get_notifications
 //import { send_notification } from './controllers/notification_controller';
 
 // Middlewares
-import { validateSignUp, validateSearchUser, validateSearch } from './middlewares/validation';
+import { validateSignUp, validateSearchUser, validateSearch, validateEditUser } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
 
 
@@ -81,7 +81,7 @@ router.post('/api/save-fcm-token', save_fcm_token);
 router.get('/api/user/profile/:userId', requireLogin, profile);
 router.get('/api/user/profile/:userId/:tab/:page', requireLogin, profile_posts);
 router.post('/api/user/search/:page/:search', [requireLogin, validateSearchUser], search_user);
-router.post('/api/user/edit-user', [requireLogin, validateSearchUser], edit_user);
+router.post('/api/user/edit-user', [requireLogin, validateEditUser], edit_user);
 
 /* ------- FOLLOWS ------- */
 router.get('/api/followers/:userId/:page', requireLogin, followers);

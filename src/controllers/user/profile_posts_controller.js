@@ -1,4 +1,4 @@
-import { findTop10 } from "../top_10/_queries_top10";
+//import { findTop10 } from "../top_10/_queries_top10";
 import { getUserPosts } from './_queries_user';
 const debug = require('debug')('app:profile-posts');
 

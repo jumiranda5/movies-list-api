@@ -328,6 +328,8 @@ export const getFeedGraph = async (userId, page) => {
 
     }
 
+    debug(feed.length);
+
     return feedInfo;
   }
   catch (error) {

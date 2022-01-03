@@ -1,7 +1,7 @@
 import { updateUserDocument, updateUserNode } from './_queries_user';
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { isInputDataValid } from '../../middlewares/validation';
-//const debug = require('debug')('app:edit-profile');
+const debug = require('debug')('app:edit-profile');
 
 export const edit_user = async (req, res, next) => {
 
@@ -15,6 +15,7 @@ export const edit_user = async (req, res, next) => {
   if (!isDataValid) {
     const err = new Error('Validation error.');
     err.status = 422;
+    debug(err.message);
     res.status(err.status || 500);
     return res.send({ message: err.message });
   }
@@ -23,10 +24,6 @@ export const edit_user = async (req, res, next) => {
 
     const dec = await verifyAccessToken(accessToken);
     const userId = dec.userId;
-
-  //  debug(`user id: ${chalk.green(userId)}`);
-  //  debug(`new name: ${chalk.green(name)}`);
-  //  debug(`new avatar: ${chalk.green(avatar)}`);
 
     const userData = {
       _id: userId,

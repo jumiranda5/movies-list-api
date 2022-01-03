@@ -53,6 +53,15 @@ export const validateSearchUser = [
     .trim()
 ];
 
+export const validateEditUser = [
+  body('name')
+    .isLength({min: 2, max: 50})
+    .withMessage('Should be from 2 to 50 characters.')
+    .matches(/^[^"/%$@#.,+=<>:;?!*\\{}[\]()]{1,50}$/u)
+    .withMessage('Invalid name')
+    .trim()
+];
+
 export const validateSearch = [
   param('query')
     .matches(/^[^"<>\\{}[\]]{1,200}$/u)
