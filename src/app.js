@@ -42,7 +42,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Views
-app.set('views', path.join(__dirname, '../public/views'));
+//Serves static files (we need it to import a css file)
+app.use(express.static('public'))
+app.set('views', path.join(__dirname, '../public'));
 app.set('view engine', 'pug');
 
 // include routes

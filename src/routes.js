@@ -72,8 +72,8 @@ router.post('/api/dev-message', send_message_to_dev);
 
 /* ------- HOME ------- */
 router.get('/', home);
-router.get('/terms-of-use', terms);
-router.get('/privacy-policy', privacy);
+router.get('/terms-of-use/:lang', terms);
+router.get('/privacy-policy/:lang', privacy);
 
 /* ------- AUTH ------- */
 router.get('/api', requireApiKey, access);
