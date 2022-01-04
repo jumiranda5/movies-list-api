@@ -1,5 +1,6 @@
 import User from '../../database/models/user_model';
 import Notification from '../../database/models/notifications_model';
+import Watchlist from '../../database/models/watchlist_model';
 import { graphDb } from '../../database/graphConfig';
 const debug = require('debug')('app:auth-queries');
 
@@ -138,6 +139,17 @@ export const deleteNotifications = async (userId) => {
   return count;
 
 };
+
+export const deleteWatchlists = async (userId) => {
+
+  debug('Deleting watchlists document...');
+  const del = await Watchlist.deleteOne({userId: userId});
+
+  const count = del.deletedCount;
+
+  return count;
+
+}
 
 /* ================================================================================================
 
