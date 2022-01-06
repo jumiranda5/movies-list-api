@@ -76,6 +76,18 @@ export const checkIfUserExists = async (googleId) => {
 
 };
 
+export const findTestUser = async () => {
+
+  const query = { _id: '61d6db1bcf3c93aa74d7fc78' };
+  const userObj = ['_id', 'username', 'name', 'avatar', 'isPrivate'];
+
+  debug(`Finding test user...`);
+  const user = await User.findOne(query, userObj).exec();
+
+  return user;
+
+};
+
 // UPDATE
 
 export const updateUserSid = async (userId, sid) => {
@@ -149,7 +161,7 @@ export const deleteWatchlists = async (userId) => {
 
   return count;
 
-}
+};
 
 /* ================================================================================================
 

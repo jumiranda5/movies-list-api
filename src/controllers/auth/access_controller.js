@@ -22,6 +22,9 @@ export const access = async (req, res) => {
       const userId = access_token_dec.userId;
       const current_sid = await findUserSid(userId);
 
+      debug(`current sid: ${current_sid}`);
+      debug(`access sid: ${access_token_dec.sid}`);
+
       if (current_sid === access_token_dec.sid) return res.json({message: 'Valid access token'});
       else return res.json({message: 'Invalid access token'});
 
@@ -34,7 +37,8 @@ export const access = async (req, res) => {
   }
   else {
     debug(`User not logged in.`);
-    return res.json({message: 'Invalid access token'});
+    //return res.json({message: 'No access token'});
+    return res.json({message: 'Test access token'});
   }
 
 };
