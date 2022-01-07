@@ -37,8 +37,8 @@ export const access = async (req, res) => {
   }
   else {
     debug(`User not logged in.`);
-    //return res.json({message: 'No access token'});
-    return res.json({message: 'Test access token'});
+    return res.json({message: 'No access token'});
+    //return res.json({message: 'Test access token'});
   }
 
 };
