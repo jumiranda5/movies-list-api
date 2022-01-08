@@ -16,7 +16,35 @@ export const add_post = async (req, res, next) => {
   const comment = req.body.comment || ""; // todo: validation
   const reaction = req.body.reaction;
   const title = req.body.title;
-  const top10 = req.body.top10;
+  const top10Req = req.body.top10;
+
+  let top10 = [];
+  for (let i = 0; i < top10Req.length; i++) {
+
+    const _id = top10Req[i]._id;
+    const genre = top10Req[i].genre;
+    const overview = top10Req[i].overview;
+    const poster = top10Req[i].poster;
+    const release_year = top10Req[i].release_year;
+    const title = top10Req[i].title;
+    const tmdb_id = top10Req[i]._id;
+    const type = top10Req[i].type;
+
+    const top10Item = {
+      _id,
+      genre,
+      overview,
+      poster,
+      release_year,
+      title,
+      tmdb_id,
+      type
+    };
+
+    top10.push(top10Item);
+
+  }
+
 
   let titleData;
   if (title) {

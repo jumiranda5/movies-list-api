@@ -30,7 +30,7 @@ export const access = async (req, res) => {
 
     }
     catch (error) {
-      debug('Invalid access token');
+      debug('Error: Invalid access token');
       return res.json({message: 'Invalid access token'});
     }
 
@@ -38,7 +38,6 @@ export const access = async (req, res) => {
   else {
     debug(`User not logged in.`);
     return res.json({message: 'No access token'});
-    //return res.json({message: 'Test access token'});
   }
 
 };
