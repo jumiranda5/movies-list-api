@@ -312,3 +312,48 @@ export const getMainTrailer = (trailerObjArray) => {
   }
 
 };
+
+/* ========== TRENDING ITEM OBJECT ========== */
+
+export const trendingResults = (responseData, savedMovies, savedSeries) => {
+
+  const image_base_url = tmdb.images.secure_base_url;
+  const poster_size = tmdb.images.poster_sizes[4];
+
+  return new Promise((resolve, reject) => {
+
+    try{
+
+      const responseArray = [];
+
+      for (let i = 0; i < responseData.length; i++) {
+
+        // IS SAVED ON WATCHLIST
+        const media_type = responseData[i].media_type;
+        let isBookmarked = false;
+        if (media_type === 'movie' && savedMovies.find(doc => doc._id === responseData[i].id.toString())) isBookmarked = true;
+        if (media_type === 'tv' && savedSeries.find(doc => doc._id === responseData[i].id.toString())) isBookmarked = true;
+
+        // DATA OBJECT
+
+        const data = {
+          title: responseData[i].title || responseData[i].name,
+          tmdb_id: responseData[i].id,
+          type: media_type,
+          poster: `${image_base_url}${poster_size}${responseData[i].poster_path}`,
+          isBookmarked: isBookmarked
+        };
+
+        responseArray.push(data);
+
+      }
+
+      resolve(responseArray);
+    }
+    catch(error) {
+      reject(error);
+    }
+
+  });
+
+};

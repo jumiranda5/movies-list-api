@@ -20,17 +20,25 @@ const PostSchema = new Schema({
     trim: true,
     required: true
   },
-  title: Media,
-  comment: {
+  tmdb_id: {
     type: String
   },
+  title: Media,
   reaction: {
     type: String // emoji code
   },
-  top_10: []
+  createdAt: {
+    type: Number,
+    default: Date.now(),
+    index: true
+  }
+  //,  comment: {
+  //     type: String
+  //   },
+  //,  top_10: []
 });
 
-PostSchema.set('timestamps', true);
+//PostSchema.set('timestamps', true);
 
 const Post = mongoose.model('Post', PostSchema);
 export default Post;

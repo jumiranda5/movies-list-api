@@ -14,22 +14,28 @@ const debug = require('debug')('app:post-queries');
 
 export const createPostDocument = async (postData) => {
 
-  const post = await Post.create(postData);
-  return post;
+  //const post = await Post.create(postData);
+  //return post;
 
-  /*
-  try {
-    const post = await Post.create(postData);
-    debug('Post document created on mongodb.');
-    return post;
-  }
-  catch (error) {
-    debug(`Error code: ${error.code}`);
-    debug(`Error message: ${error.message}`);
+  debug(postData.title._id);
+  const createdAt = Date.now();
 
-    throw error;
-  }
-  */
+  const query = { userId: postData.userId, tmdb_id: postData.title._id };
+  const update = { $set: {
+    userId: postData.userId,
+    post_type: postData.post_type,
+    media_type: postData.media_type,
+    tmdb_id: postData.title._id,
+    title: postData.title,
+    reaction: postData.reaction,
+    createdAt: createdAt
+  }};
+  const options = { upsert: true };
+
+  const post = await Post.updateOne(query, update, options).exec();
+  debug(post);
+  debug(post.upsertedId);
+  return post.upsertedId;
 
 };
 
@@ -157,7 +163,7 @@ export const createPostNode = async (postData, postId) => {
 
 };
 
-export const createPostReaction = async (postData, postId) => {
+export const createPostReaction = async (postData) => {
 
   const userId = postData.userId;
   const titleId = postData.title._id;
@@ -167,29 +173,20 @@ export const createPostReaction = async (postData, postId) => {
   await graphDb.query(`
     MATCH (from:User {userId: '${userId}'})
     MERGE (to:Title { titleId: '${titleId}' })
+    MERGE (from)-[r:REACTED]->(to)
+    SET r.createdAt ='${createdAt}'
+    SET r.reaction ='${reaction}'
+  `);
+
+  /*
+  await graphDb.query(`
+    MATCH (from:User {userId: '${userId}'})
+    MERGE (to:Title { titleId: '${titleId}' })
     MERGE (from)-[r:REACTED {reaction: '${reaction}'}]->(to)
     CREATE (post:Post {postId: '${postId}'})
     CREATE (from)-[p:POSTED]->(post)
     SET post.createdAt ='${createdAt}'
   `);
-
-  /*
-  try {
-    await graphDb.query(`
-      MATCH (from:User {userId: '${userId}'})
-      MERGE (to:Title { titleId: '${titleId}' })
-      MERGE (from)-[r:REACTED {reaction: '${reaction}'}]->(to)
-      CREATE (post:Post {postId: '${postId}'})
-      CREATE (from)-[p:POSTED]->(post)
-      SET post.createdAt ='${createdAt}'
-    `);
-    //debug(`res._statistics: ${res._statistics._raw}`);
-    return;
-  }
-  catch (error) {
-    //debug(error);
-    throw error;
-  }
   */
 
 };

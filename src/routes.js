@@ -41,7 +41,8 @@ import { tmdb_item } from './controllers/tmdb/tmdb_item_controller';
 import { reactions_users } from './controllers/tmdb/reactions_controller';
 
 // Post
-import { add_post } from './controllers/post/add_post_controller';
+//import { add_post } from './controllers/post/add_post_controller';
+//import { create_post } from './controllers/post/create_post_controller';
 import { delete_post } from './controllers/post/delete_post_controller';
 import { get_likes } from './controllers/post/get_likes_controller';
 import { feed } from './controllers/post/feed_controller';
@@ -51,6 +52,10 @@ import { comments } from './controllers/post/comments';
 import { create_comment } from './controllers/post/create_comment';
 import { post } from './controllers/post/post_controller';
 import { delete_comment } from './controllers/post/delete_comment';
+
+// Reaction
+import { create_reaction } from './controllers/reaction/create_reaction_controller';
+import { get_trending } from './controllers/reaction/get_trending_controller';
 
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
@@ -107,10 +112,15 @@ router.get('/api/tmdb/search/movie/:query/:page/:lang', [requireLogin, requireAp
 router.get('/api/tmdb/item/:type/:itemId/:lang', [requireLogin, requireApiKey], tmdb_item);
 router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', [requireLogin, requireApiKey], reactions_users);
 
+/* -------- REACTIONS -------- */
+router.get('/api/reaction/trending', get_trending);
+router.post('/api/post/add/:type', [requireLogin, requireApiKey], create_reaction);
+
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', [requireLogin, requireApiKey], feed);
 router.get('/api/post/:postId', [requireLogin, requireApiKey], post);
-router.post('/api/post/add/:type', [requireLogin, requireApiKey], add_post);
+//router.post('/api/post/add/:type', [requireLogin, requireApiKey], create_post);
+//router.post('/api/post/add/:type', [requireLogin, requireApiKey], add_post);
 router.post('/api/post/delete/:postId', [requireLogin, requireApiKey], delete_post);
 
 /* -------- LIKES -------- */
