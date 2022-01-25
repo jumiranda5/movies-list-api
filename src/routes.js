@@ -113,13 +113,12 @@ router.get('/api/tmdb/item/:type/:itemId/:lang', [requireLogin, requireApiKey], 
 router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', [requireLogin, requireApiKey], reactions_users);
 
 /* -------- REACTIONS -------- */
-router.get('/api/reaction/trending', get_trending);
+router.get('/api/reaction/trending/:type/:lang', get_trending);
 router.post('/api/post/add/:type', [requireLogin, requireApiKey], create_reaction);
 
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', [requireLogin, requireApiKey], feed);
 router.get('/api/post/:postId', [requireLogin, requireApiKey], post);
-//router.post('/api/post/add/:type', [requireLogin, requireApiKey], create_post);
 //router.post('/api/post/add/:type', [requireLogin, requireApiKey], add_post);
 router.post('/api/post/delete/:postId', [requireLogin, requireApiKey], delete_post);
 

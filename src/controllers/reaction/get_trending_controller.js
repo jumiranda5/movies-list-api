@@ -13,8 +13,9 @@ export const get_trending = async (req, res, next) => {
   //return res.json({ trending: trendingList });
 
   const api_key = config.TMDB_API_KEY;
-  const media_type = "all"; // all || movie || tv
+  const media_type = req.params.type; // all || movie || tv
   const time_window = "day"; // day || week
+  const lang = req.params.lang;
 
   const route = `${tmdb.base_url}/trending/${media_type}/${time_window}?api_key=${api_key}`;
   debug(route);
@@ -35,14 +36,17 @@ export const get_trending = async (req, res, next) => {
       savedSeries = watchlistDocument.series || [];
     }
 
-    const responseData = await trendingResults(response.data.results, savedMovies, savedSeries);
+    const responseData = await trendingResults(response.data.results, savedMovies, savedSeries, lang);
 
     // Get results reactions
 
     const responseDataWithReactions = await getTrending(responseData);
 
+    //debug(responseDataWithReactions);
+
     return res.json({
-      response: responseDataWithReactions
+      message: 'Success',
+      trending: responseDataWithReactions
     })
   }
   catch (error) {

@@ -315,10 +315,13 @@ export const getMainTrailer = (trailerObjArray) => {
 
 /* ========== TRENDING ITEM OBJECT ========== */
 
-export const trendingResults = (responseData, savedMovies, savedSeries) => {
+export const trendingResults = (responseData, savedMovies, savedSeries, lang) => {
 
   const image_base_url = tmdb.images.secure_base_url;
   const poster_size = tmdb.images.poster_sizes[4];
+
+  const langParts = lang.split("-");
+  const lang1 = langParts[0];
 
   return new Promise((resolve, reject) => {
 
@@ -328,23 +331,46 @@ export const trendingResults = (responseData, savedMovies, savedSeries) => {
 
       for (let i = 0; i < responseData.length; i++) {
 
+        const data = responseData[i];
+
         // IS SAVED ON WATCHLIST
-        const media_type = responseData[i].media_type;
+        const media_type = data.media_type;
         let isBookmarked = false;
-        if (media_type === 'movie' && savedMovies.find(doc => doc._id === responseData[i].id.toString())) isBookmarked = true;
-        if (media_type === 'tv' && savedSeries.find(doc => doc._id === responseData[i].id.toString())) isBookmarked = true;
+        if (media_type === 'movie' && savedMovies.find(doc => doc._id === data.id.toString())) isBookmarked = true;
+        if (media_type === 'tv' && savedSeries.find(doc => doc._id === data.id.toString())) isBookmarked = true;
 
-        // DATA OBJECT
+        // Year
+        const release_date = data.release_date || data.first_air_date;
+        let year = '';
+        if (release_date) {
+          const dateParts = release_date.split("-");
+          year = dateParts[0];
+        }
 
-        const data = {
-          title: responseData[i].title || responseData[i].name,
-          tmdb_id: responseData[i].id,
+        // GENRES
+        const genre_ids = data.genre_ids || [];
+        const genreId = genre_ids[0];
+        let genreName;
+        const genre = tmdb.genres.find(genre => genre.id === genreId);
+        if (genre) {
+          if (lang1 === 'pt') genreName = genre.name_pt;
+          else genreName = genre.name;
+        }
+
+        // RESPONSE OBJECT
+
+        const response = {
+          title: data.title || data.name,
+          tmdb_id: data.id,
           type: media_type,
-          poster: `${image_base_url}${poster_size}${responseData[i].poster_path}`,
-          isBookmarked: isBookmarked
+          poster: `${image_base_url}${poster_size}${data.poster_path}`,
+          isBookmarked: isBookmarked,
+          overview: data.overview,
+          release_year: year,
+          genre: genreName
         };
 
-        responseArray.push(data);
+        responseArray.push(response);
 
       }
 

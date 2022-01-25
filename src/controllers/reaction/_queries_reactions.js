@@ -66,8 +66,6 @@ export const deleteAllPostsDocuments = async (userId) => {
 
 export const getTrending = async (trendingList) => {
 
-  debug(`tmdb_id: ${trendingList[2].tmdb_id}`);
-
   const counts = await Post.aggregate([
     { $facet: {
       "one": [
@@ -182,30 +180,33 @@ export const getTrending = async (trendingList) => {
   for (let i = 0; i < trendingList.length; i++) {
 
     let reactions;
+    let total;
 
     switch (i) {
-      case 0: reactions = r1; break;
-      case 1: reactions = r2; break;
-      case 2: reactions = r3; break;
-      case 3: reactions = r4; break;
-      case 4: reactions = r5; break;
-      case 5: reactions = r6; break;
-      case 6: reactions = r7; break;
-      case 7: reactions = r8; break;
-      case 8: reactions = r9; break;
-      case 9: reactions = r10; break;
-      case 10: reactions = r11; break;
-      case 11: reactions = r12; break;
-      case 12: reactions = r13; break;
-      case 13: reactions = r14; break;
-      case 14: reactions = r15; break;
-      case 15: reactions = r16; break;
-      case 16: reactions = r17; break;
-      case 17: reactions = r18; break;
-      case 18: reactions = r19; break;
-      case 19: reactions = r20; break;
-      default: reactions = [];
+      case 0: reactions = r1.reactionsList; total = r1.total; break;
+      case 1: reactions = r2.reactionsList; total = r2.total; break;
+      case 2: reactions = r3.reactionsList; total = r3.total; break;
+      case 3: reactions = r4.reactionsList; total = r4.total; break;
+      case 4: reactions = r5.reactionsList; total = r5.total; break;
+      case 5: reactions = r6.reactionsList; total = r6.total; break;
+      case 6: reactions = r7.reactionsList; total = r7.total; break;
+      case 7: reactions = r8.reactionsList; total = r8.total; break;
+      case 8: reactions = r9.reactionsList; total = r9.total; break;
+      case 9: reactions = r10.reactionsList; total = r10.total; break;
+      case 10: reactions = r11.reactionsList; total = r11.total; break;
+      case 11: reactions = r12.reactionsList; total = r12.total; break;
+      case 12: reactions = r13.reactionsList; total = r13.total; break;
+      case 13: reactions = r14.reactionsList; total = r14.total; break;
+      case 14: reactions = r15.reactionsList; total = r15.total; break;
+      case 15: reactions = r16.reactionsList; total = r16.total; break;
+      case 16: reactions = r17.reactionsList; total = r17.total; break;
+      case 17: reactions = r18.reactionsList; total = r18.total; break;
+      case 18: reactions = r19.reactionsList; total = r19.total; break;
+      case 19: reactions = r20.reactionsList; total = r20.total; break;
+      default: reactions = []; total = 0;
     }
+
+    const position = i + 1;
 
     const data = {
       title: trendingList[i].title,
@@ -213,7 +214,12 @@ export const getTrending = async (trendingList) => {
       type: trendingList[i].type,
       poster: trendingList[i].poster,
       isBookmarked: trendingList[i].isBookmarked,
-      reactions: reactions
+      overview: trendingList[i].overview,
+      release_year: trendingList[i].release_year,
+      genre: trendingList[i].genre,
+      reactions: reactions,
+      totalReactions: total,
+      position: position
     };
 
     trendingWithReactions.push(data);
@@ -227,6 +233,7 @@ export const getTrending = async (trendingList) => {
 const createReactionsList = (reactions) => {
 
   const reactionsList = [];
+  let total = 0;
 
   for (let i = 0; i < reactions.length; i++) {
 
@@ -235,12 +242,20 @@ const createReactionsList = (reactions) => {
       count: reactions[i].count
     };
 
+    total = total + reactions[i].count;
+
     reactionsList.push(reaction);
 
   }
 
-  return reactionsList;
+  const reactionObject = {
+    reactionsList: reactionsList,
+    total: total
+  };
+
+  return reactionObject;
 };
+
 
 /* ================================================================================================
 
