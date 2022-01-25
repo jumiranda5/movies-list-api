@@ -4,7 +4,7 @@ import config from '../../config';
 import tmdb from '../../config_tmdb';
 import { verifyAccessToken } from '../../helpers/token_helper';
 import { getProviders, getMainTrailer, getMediaObject } from '../../helpers/tmdb_helper';
-import { getAllReactions, getFollowingReactions, findWatchlist } from './_queries_tmdb';
+import { getAllReactions, getFollowingReactions, findWatchlist, getUserReaction } from './_queries_tmdb';
 const debug = require('debug')('app:tmdb');
 
 export const tmdb_item = async (req, res, next) => {
@@ -44,7 +44,8 @@ export const tmdb_item = async (req, res, next) => {
       axios(get(justwatch_route)),
       getAllReactions(itemId),
       getFollowingReactions(itemId, userId),
-      findWatchlist(userId, type)
+      findWatchlist(userId, type),
+      getUserReaction(itemId, userId)
     ]);
     debug('...done'); // +409ms
 
@@ -53,6 +54,7 @@ export const tmdb_item = async (req, res, next) => {
     const app_reactions = itemData[2];
     const following_reactions = itemData[3];
     const watchlist = itemData[4];
+    const userReaction = itemData[5];
 
     debug('build tmdb object...');
     const responseObjects = await Promise.all([
@@ -114,6 +116,7 @@ export const tmdb_item = async (req, res, next) => {
       appReactionsTotal: app_reactions_total,
       followingReactions: following_reactions_array,
       followingReactionsTotal: following_reactions_total,
+      userReaction: userReaction,
       tmdbResponse: data,
       trailer: trailerResponse,
       providers: providers,

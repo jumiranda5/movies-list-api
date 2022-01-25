@@ -5,6 +5,7 @@ import axios from 'axios';
 import config from '../../config';
 import tmdb from '../../config_tmdb';
 import { trendingResults } from "../../helpers/tmdb_helper";
+import { verifyAccessToken } from "../../helpers/token_helper";
 const debug = require('debug')('app:trending');
 
 export const get_trending = async (req, res, next) => {
@@ -24,9 +25,9 @@ export const get_trending = async (req, res, next) => {
     const response = await axios(get(route));
 
     // Check if results are bookmarked
-//    const accessToken = req.headers['x-access-token'];
-//    const dec = await verifyAccessToken(accessToken);
-    const userId = "61d4c69329072ca3b7d74183";
+    const accessToken = req.headers['x-access-token'];
+    const dec = await verifyAccessToken(accessToken);
+    const userId = dec.userId;
     const watchlistDocument = await findWatchlist(userId);
 
     let savedMovies = [];

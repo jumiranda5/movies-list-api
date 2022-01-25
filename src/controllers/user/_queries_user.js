@@ -194,9 +194,9 @@ export const getUserPosts = async (userId, tab, page) => {
       reaction: posts[i].reaction || null,
       title: posts[i].title || null
     };
-    postsList.push(post);
 
-    //debug(`Media type: ${posts[i].media_type}`)
+    if (posts[i].post_type === "reaction") postsList.push(post);
+
   }
 
   return postsList;

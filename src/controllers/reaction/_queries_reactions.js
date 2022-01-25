@@ -32,16 +32,16 @@ export const createPostDocument = async (postData) => {
 
 };
 
-export const deletePostDocument = async (postId, userId) => {
+export const deletePostDocument = async (titleId, userId) => {
 
   debug('Deleting post document...');
-  const del = await Post.deleteOne({_id: postId, userId: userId});
+  const del = await Post.deleteOne({userId: userId, tmdb_id: titleId});
   debug('...done');
 
   const count = del.deletedCount;
 
   if (count === 0) {
-    const error = new Error(`${postId} not found`);
+    const error = new Error(`${titleId} not found`);
     error.status = 404;
     throw error;
   }
@@ -228,7 +228,7 @@ export const getTrending = async (trendingList) => {
 
   return trendingWithReactions;
 
-}
+};
 
 const createReactionsList = (reactions) => {
 

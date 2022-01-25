@@ -12,8 +12,7 @@ export const logout = async (req, res) => {
     const dec = await verifyAccessToken(accessToken);
     const userId = dec.userId;
 
-    if (userId === '61d6db1bcf3c93aa74d7fc78') debug(`test user, keed old sid...`);
-    else await updateUserSid(userId, 'logged out');
+    await updateUserSid(userId, 'logged out');
 
     return res.json({message: 'Success'});
 

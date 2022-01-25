@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
 
+// TODO!! => remove unused routes and controllers!
+
 // dev message
 import { send_message_to_dev } from './controllers/dev_message';
 
@@ -43,7 +45,7 @@ import { reactions_users } from './controllers/tmdb/reactions_controller';
 // Post
 //import { add_post } from './controllers/post/add_post_controller';
 //import { create_post } from './controllers/post/create_post_controller';
-import { delete_post } from './controllers/post/delete_post_controller';
+//import { delete_post } from './controllers/post/delete_post_controller';
 import { get_likes } from './controllers/post/get_likes_controller';
 import { feed } from './controllers/post/feed_controller';
 import { like } from './controllers/post/like_controller';
@@ -56,6 +58,7 @@ import { delete_comment } from './controllers/post/delete_comment';
 // Reaction
 import { create_reaction } from './controllers/reaction/create_reaction_controller';
 import { get_trending } from './controllers/reaction/get_trending_controller';
+import { delete_reaction } from './controllers/reaction/delete_reaction_controller';
 
 // Top 10
 import { top10 } from './controllers/top_10/top10_controller';
@@ -113,14 +116,15 @@ router.get('/api/tmdb/item/:type/:itemId/:lang', [requireLogin, requireApiKey], 
 router.get('/api/tmdb/reactions/:reactionsType/:tmdbId/:page', [requireLogin, requireApiKey], reactions_users);
 
 /* -------- REACTIONS -------- */
-router.get('/api/reaction/trending/:type/:lang', get_trending);
+router.get('/api/reaction/trending/:type/:lang', [requireLogin, requireApiKey], get_trending);
 router.post('/api/post/add/:type', [requireLogin, requireApiKey], create_reaction);
+router.post('/api/post/delete/:titleId', [requireLogin, requireApiKey], delete_reaction);
 
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', [requireLogin, requireApiKey], feed);
 router.get('/api/post/:postId', [requireLogin, requireApiKey], post);
 //router.post('/api/post/add/:type', [requireLogin, requireApiKey], add_post);
-router.post('/api/post/delete/:postId', [requireLogin, requireApiKey], delete_post);
+//router.post('/api/post/delete/:postId', [requireLogin, requireApiKey], delete_post);
 
 /* -------- LIKES -------- */
 router.get('/api/post/likes/:id/:page/:type', [requireLogin, requireApiKey], get_likes);

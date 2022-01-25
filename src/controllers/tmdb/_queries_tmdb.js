@@ -18,7 +18,7 @@ export const findWatchlist = async (userId, mediaType) => {
   else watchlist = await Watchlist.findOne({userId: userId}, ['series']).exec();
 
   if (watchlist !== null) {
-    debug(`watchlist found: ${watchlist}`);
+    //debug(`watchlist found: ${watchlist}`);
     return watchlist;
   }
   else {
@@ -33,6 +33,31 @@ export const findWatchlist = async (userId, mediaType) => {
                                           GRAPH QUERIES
 
 ================================================================================================= */
+
+export const getUserReaction = async (tmdb_id, userId) => {
+
+  const query = `
+    MATCH (u:User {userId: '${userId}'})-[r:REACTED]->(t:Title { titleId: '${tmdb_id}' })
+    RETURN r.reaction AS reaction
+  `;
+
+  try {
+    const res = await graphDb.query(query);
+    const data = res._results;
+
+    if (data.length > 0) {
+      const reaction_name = data[0]._values[0];
+      return reaction_name;
+    }
+    else return null;
+
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+
+};
 
 export const getAllReactions = async (tmdb_id) => {
 
