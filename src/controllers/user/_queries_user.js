@@ -76,7 +76,7 @@ export const getUserProfile = async (userId, visitorId) => {
       OPTIONAL MATCH (:User)-[f1:FOLLOWS]->(u)
       WITH u AS user, count(f1) AS followers
       OPTIONAL MATCH (user)-[f2:FOLLOWS]->(:User)
-      OPTIONAL MATCH (user)-[:POSTED]->(p:Post)
+      OPTIONAL MATCH (user)-[p:REACTED]->(:Title)
       RETURN user, followers, count(DISTINCT f2) AS following, count(DISTINCT p) AS posts
     `;
 
@@ -88,7 +88,7 @@ export const getUserProfile = async (userId, visitorId) => {
     OPTIONAL MATCH (visitor:User{userId: '${visitorId}'})-[isFollowing:FOLLOWS]->(u)
     WITH u AS user, count(f1) AS followers, count(DISTINCT isFollowing) AS isFollowing
     OPTIONAL MATCH (user)-[f2:FOLLOWS]->(:User)
-    OPTIONAL MATCH (user)-[:POSTED]->(p:Post)
+    OPTIONAL MATCH (user)-[p:REACTED]->(:Title)
     RETURN user, followers, count(DISTINCT f2) AS following, count(DISTINCT p) AS posts, isFollowing
   `;
 
@@ -96,8 +96,6 @@ export const getUserProfile = async (userId, visitorId) => {
 
   const graphRes = await graphDb.query(query);
   const results = graphRes._results;
-
-  //debug(graphRes);
 
   const userRes = results[0]._values[0].properties;
   const followersCount = results[0]._values[1];
@@ -128,6 +126,8 @@ export const getUserProfile = async (userId, visitorId) => {
     followingCount,
     isFollowing: isFollowing
   };
+
+  debug(data);
 
   return data;
 
