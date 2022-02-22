@@ -14,7 +14,7 @@ const path = require("path");
 
 const corsConfig = {
   origin: [
-    'https://euvi.herokuapp.com/'
+    'https://jgm-movies-list.herokuapp.com/'
   ],
   methods:['GET','POST'],
   credentials: false
