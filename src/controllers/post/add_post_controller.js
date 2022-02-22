@@ -18,7 +18,7 @@ export const add_post = async (req, res, next) => {
   const title = req.body.title;
   const top10Req = req.body.top10;
 
-  let top10 = [];
+  const top10 = [];
   for (let i = 0; i < top10Req.length; i++) {
 
     const _id = top10Req[i]._id;

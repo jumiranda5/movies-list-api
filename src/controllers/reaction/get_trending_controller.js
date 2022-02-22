@@ -48,7 +48,7 @@ export const get_trending = async (req, res, next) => {
     return res.json({
       message: 'Success',
       trending: responseDataWithReactions
-    })
+    });
   }
   catch (error) {
     return next(error);

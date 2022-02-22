@@ -1,5 +1,5 @@
 import { createAccessToken, verifyGoogleToken } from '../../helpers/token_helper';
-import { checkIfUserExists, updateUserSid, findTestUser } from './_queries_auth';
+import { checkIfUserExists, updateUserSid } from './_queries_auth';
 import { v4 as uuidv4 } from 'uuid';
 const debug = require('debug')('app:login');
 
