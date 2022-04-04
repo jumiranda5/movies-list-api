@@ -70,21 +70,22 @@ export const updateTop10 = async (userId, top10, type) => {
 
 };
 
-export const getPosts = async (ids) => {
+export const getPosts = async (ids_user) => {
 
-  const query = {"_id": {$in: ids}};
+  const query = {"userId": {$in: ids_user}, "post_type": "reaction"};
   const postObject = [
     '_id',
     'userId',
     'post_type',
     'media_type',
     'title',
-    'top_10',
     'reaction',
-    'comment'
+    'createdAt',
+    'updatedAt'
   ];
 
-  const posts = await Post.find(query, postObject).exec();
+  const posts = await Post.find(query, postObject).sort({createdAt: -1}).exec();
+
   return posts;
 
 };
@@ -267,6 +268,73 @@ export const getFeedGraph = async (userId, page) => {
   const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
 
   const query = `
+    MATCH (n:User{userId:'${userId}'})-[f:FOLLOWS*0..1]->(following:User)-[r:REACTED]->(t:Title)
+    RETURN r, t, following
+    ORDER BY r.createdAt DESC
+    SKIP ${nSkip}
+    LIMIT ${nPerPage}
+  `;
+
+  try {
+    const graphRes = await graphDb.query(query);
+    const results = graphRes._results;
+
+    const feed = [];
+    const ids_user = [];
+    const ids_tmdb = [];
+
+    const feedInfo = {
+      ids_tmdb,
+      ids_user,
+      feed
+    };
+
+    for (let i = 0; i < results.length; i++) {
+
+      const reaction = results[i]._values[0].properties.reaction;
+      const createdAt = results[i]._values[0].properties.createdAt;
+      const titleId = results[i]._values[1].properties.titleId;
+      const user = results[i]._values[2].properties;
+
+      const userObject = graphUserObject(user);
+      ids_tmdb.push(titleId);
+      ids_user.push(user.userId);
+      const post = {
+        userId: user.userId,
+        tmdb_id: titleId
+      };
+
+      const feedItem = {
+        user: userObject,
+        isOwnPost: false,
+        post,
+        createdAt
+      };
+
+      feed.push(feedItem);
+
+    }
+
+    //debug(feed);
+    debug(feed.length);
+
+    return feedInfo;
+  }
+  catch (error) {
+    debug(error);
+    throw error;
+  }
+};
+
+/*
+
+FEED GRAPH WITH POSTS (OLD)
+export const getFeedGraph = async (userId, page) => {
+
+  const nPerPage = 15;
+  const nSkip = page > 0 ? ( ( page - 1 ) * nPerPage ) : 0;
+
+  const query = `
     MATCH (n:User{userId:'${userId}'})-[f:FOLLOWS*0..1]->(following:User)-[:POSTED]->(post)
     OPTIONAL MATCH (:User)-[l:LIKED]->(post)
     OPTIONAL MATCH (:Comment)-[c:TO]->(post)
@@ -291,8 +359,6 @@ export const getFeedGraph = async (userId, page) => {
       posts,
       feed
     };
-
-    //debug(results);
 
     for (let i = 0; i < results.length; i++) {
 
@@ -325,6 +391,7 @@ export const getFeedGraph = async (userId, page) => {
 
     }
 
+    debug(feed);
     debug(feed.length);
 
     return feedInfo;
@@ -334,6 +401,8 @@ export const getFeedGraph = async (userId, page) => {
     throw error;
   }
 };
+
+*/
 
 /*
 

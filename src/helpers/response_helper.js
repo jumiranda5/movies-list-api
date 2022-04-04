@@ -35,10 +35,8 @@ export const postObject = (post) => {
   return {
     postId: post._id,
     userId: post.userId,
-    comment: post.comment,
     postType: post.post_type,
     mediaType: post.media_type,
-    top10: post.top_10,
     reaction: post.reaction,
     title: titleObject
   };
