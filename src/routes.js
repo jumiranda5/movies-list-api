@@ -43,25 +43,13 @@ import { tmdb_item } from './controllers/tmdb/tmdb_item_controller';
 import { reactions_users } from './controllers/tmdb/reactions_controller';
 
 // Post
-//import { add_post } from './controllers/post/add_post_controller';
-//import { create_post } from './controllers/post/create_post_controller';
-//import { delete_post } from './controllers/post/delete_post_controller';
-import { get_likes } from './controllers/post/get_likes_controller';
 import { feed } from './controllers/post/feed_controller';
-import { like } from './controllers/post/like_controller';
-import { delete_like } from './controllers/post/delete_like_controller';
-import { comments } from './controllers/post/comments';
-import { create_comment } from './controllers/post/create_comment';
 import { post } from './controllers/post/post_controller';
-import { delete_comment } from './controllers/post/delete_comment';
 
 // Reaction
 import { create_reaction } from './controllers/reaction/create_reaction_controller';
 import { get_trending } from './controllers/reaction/get_trending_controller';
 import { delete_reaction } from './controllers/reaction/delete_reaction_controller';
-
-// Top 10
-import { top10 } from './controllers/top_10/top10_controller';
 
 // Notifications
 import { new_notifications_count } from './controllers/notifications/get_new_notifications_count';
@@ -75,9 +63,6 @@ import { edit_notifications_prefs } from './controllers/notifications/edit_notif
 import { validateSignUp, validateSearchUser, validateSearch, validateEditUser } from './middlewares/validation';
 import { requireLogin } from './middlewares/requireLogin';
 import { requireApiKey } from './middlewares/requireApiKey';
-
-import { test } from './controllers/test_controller';
-router.get('api/test', test);
 
 router.post('/api/dev-message', send_message_to_dev);
 
@@ -126,22 +111,6 @@ router.post('/api/post/delete/:titleId', [requireLogin, requireApiKey], delete_r
 /* -------- POSTS -------- */
 router.get('/api/post/feed/:page', [requireLogin, requireApiKey], feed);
 router.get('/api/post/:postId', [requireLogin, requireApiKey], post);
-//router.post('/api/post/add/:type', [requireLogin, requireApiKey], add_post);
-//router.post('/api/post/delete/:postId', [requireLogin, requireApiKey], delete_post);
-
-/* -------- LIKES -------- */
-router.get('/api/post/likes/:id/:page/:type', [requireLogin, requireApiKey], get_likes);
-router.post('/api/like/create/:targetId/:type/:targetUserId/:senderUsername/:postId/:lang', [requireLogin, requireApiKey], like);
-router.post('/api/like/delete/:postId/:type', [requireLogin, requireApiKey], delete_like);
-
-/* -------- COMMENTS -------- */
-router.get('/api/comment/all/:postId/:page', [requireLogin, requireApiKey], comments);
-router.post('/api/comment/create/:postId/:targetUserId/:responseTo/:senderUsername/:lang', [requireLogin, requireApiKey], create_comment);
-router.post('/api/comment/delete/:commentId', [requireLogin, requireApiKey], delete_comment);
-
-/* -------- Top 10 -------- */
-router.get('/api/top10/:type', [requireLogin, requireApiKey], top10);
-
 
 /* -------- Notifications -------- */
 router.post('/api/notifications/prefs/:value', [requireLogin, requireApiKey], edit_notifications_prefs);
