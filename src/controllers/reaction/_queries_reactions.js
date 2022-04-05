@@ -263,7 +263,7 @@ const createReactionsList = (reactions) => {
 
 ================================================================================================= */
 
-export const createPostReaction = async (postData) => {
+export const createPostReaction = async (postData, postId) => {
 
   const userId = postData.userId;
   const titleId = postData.title._id;
@@ -274,9 +274,11 @@ export const createPostReaction = async (postData) => {
     MATCH (from:User {userId: '${userId}'})
     MERGE (to:Title { titleId: '${titleId}' })
     MERGE (from)-[r:REACTED]->(to)
+    SET r.postId = '${postId}'
     SET r.createdAt ='${createdAt}'
     SET r.reaction ='${reaction}'
   `);
+
 
 };
 

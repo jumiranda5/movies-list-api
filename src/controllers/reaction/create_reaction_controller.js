@@ -44,9 +44,9 @@ export const create_reaction = async (req, res, next) => {
 
     debug(`Post data: ${JSON.stringify(reactionData)}`);
 
-    await createPostDocument(reactionData);
+    const postId = await createPostDocument(reactionData);
 
-    await createPostReaction(reactionData);
+    await createPostReaction(reactionData, postId.toString());
 
     return res.json({ message: 'Success' });
 

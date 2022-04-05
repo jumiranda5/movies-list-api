@@ -1,16 +1,17 @@
-import {
-  createPostDocument,
-  updateTop10,
-  createPostNode,
-  createPostReaction } from './_queries_post';
-import { verifyAccessToken } from '../../helpers/token_helper';
-const debug = require('debug')('app:post');
+//import {
+//  createPostDocument,
+//  createPostReaction } from './_queries_post';
+//import { verifyAccessToken } from '../../helpers/token_helper';
+//const debug = require('debug')('app:post');
 
 export const add_post = async (req, res, next) => {
+
+  // NOT USING THIS CONTROLLER ANYMORE => USING create_reaction_controller !!!
 
   // post type: reaction || recommendations || top_10
   // media type: tv || movie
 
+  /*
   const postType = req.params.type;
   const mediaType = req.body.mediaType;
   const comment = req.body.comment || ""; // todo: validation
@@ -112,5 +113,6 @@ export const add_post = async (req, res, next) => {
   catch (error){
     return next(error);
   }
+  */
 
 };

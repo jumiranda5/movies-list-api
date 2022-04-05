@@ -76,6 +76,9 @@ import { validateSignUp, validateSearchUser, validateSearch, validateEditUser } 
 import { requireLogin } from './middlewares/requireLogin';
 import { requireApiKey } from './middlewares/requireApiKey';
 
+import { test } from './controllers/test_controller';
+router.get('api/test', test);
+
 router.post('/api/dev-message', send_message_to_dev);
 
 /* ------- HOME ------- */

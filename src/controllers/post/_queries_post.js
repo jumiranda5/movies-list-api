@@ -164,7 +164,11 @@ export const createPostNode = async (postData, postId) => {
 
 };
 
-export const createPostReaction = async (postData) => {
+export const createPostReaction = async (postData, postId) => {
+
+  debug('should create post reaction with post id');
+  debug(postId.toString());
+  debug(postId);
 
   const userId = postData.userId;
   const titleId = postData.title._id;
@@ -175,20 +179,11 @@ export const createPostReaction = async (postData) => {
     MATCH (from:User {userId: '${userId}'})
     MERGE (to:Title { titleId: '${titleId}' })
     MERGE (from)-[r:REACTED]->(to)
+    SET r.postId = '${postId}'
     SET r.createdAt ='${createdAt}'
     SET r.reaction ='${reaction}'
   `);
 
-  /*
-  await graphDb.query(`
-    MATCH (from:User {userId: '${userId}'})
-    MERGE (to:Title { titleId: '${titleId}' })
-    MERGE (from)-[r:REACTED {reaction: '${reaction}'}]->(to)
-    CREATE (post:Post {postId: '${postId}'})
-    CREATE (from)-[p:POSTED]->(post)
-    SET post.createdAt ='${createdAt}'
-  `);
-  */
 
 };
 
