@@ -8,7 +8,7 @@
     "lint:watch": "npm run lint -- --watch",
     "open:src": "DEBUG=app:* nodemon --exec babel-node ./src/app.js",
     "open:src2": "DEBUG=app:* babel-node ./src/app.js",
-    "start-message": "DEBUG=app:* babel-node ./buildScripts/startMessege",
+    "start-message": "DEBUG=app:* babel-node ./buildScripts/startMessage",
     "dev": "npm-run-all --parallel start-message open:src lint:watch",
     "clean-dist": "rimraf ./dist && mkdir dist",
     "build-message": "DEBUG=app:* babel-node ./buildScripts/buildMessage",
@@ -44,8 +44,8 @@
   },
   "engines": {
     "debug": "^4.3.2",
-    "node": "16.6.0",
-    "npm": "7.20.3"
+    "node": "18.12.1",
+    "npm": "8.19.2"
   },
   "keywords": [
     "node",
